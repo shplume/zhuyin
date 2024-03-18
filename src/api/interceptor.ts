@@ -15,7 +15,6 @@ if (import.meta.env.VITE_API_BASE_URL) {
 
 axios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-
     const token = getToken();
     if (token) {
       if (!config.headers) {
@@ -27,7 +26,6 @@ axios.interceptors.request.use(
     return config;
   },
   (error) => {
-
     return Promise.reject(error);
   }
 );
@@ -39,7 +37,6 @@ axios.interceptors.response.use(
     return res;
   },
   (error) => {
-
     return Promise.reject(error);
   }
 );
