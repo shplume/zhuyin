@@ -5,6 +5,7 @@ import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import store from './store';
 import '@arco-design/web-vue/dist/arco.css';
 import '@/api/interceptor';
+import './mock';
 // import './assets/main.css';
 
 import App from './App.vue';
