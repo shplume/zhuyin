@@ -1,3 +1,26 @@
+<script setup>
+  import { computed } from 'vue';
+  import bannerImage from '@/assets/images/login-banner.png';
+
+  const carouselItem = computed(() => [
+    {
+      slogan: '开箱即用的高质量模板',
+      subSlogan: '丰富的的页面模板，覆盖大多数典型业务场景',
+      image: bannerImage
+    },
+    {
+      slogan: '内置了常见问题的解决方案',
+      subSlogan: '国际化，路由配置，状态管理应有尽有',
+      image: bannerImage
+    },
+    {
+      slogan: '接入可视化增强工具AUX',
+      subSlogan: '实现灵活的区块式开发',
+      image: bannerImage
+    }
+  ]);
+</script>
+
 <template>
   <div class="banner">
     <div class="banner-inner">
@@ -14,34 +37,13 @@
   </div>
 </template>
 
-<script setup>
-  import { computed } from 'vue';
-  import bannerImage from '@/assets/images/login-banner.png';
-
-  const carouselItem = computed(() => [
-    {
-      slogan: "开箱即用的高质量模板",
-      subSlogan: "丰富的的页面模板，覆盖大多数典型业务场景",
-      image: bannerImage,
-    },
-    {
-      slogan: "内置了常见问题的解决方案",
-      subSlogan: "国际化，路由配置，状态管理应有尽有",
-      image: bannerImage,
-    },
-    {
-      slogan: "接入可视化增强工具AUX",
-      subSlogan: "实现灵活的区块式开发",
-      image: bannerImage,
-    },
-  ]);
-</script>
-
 <style lang="less" scoped>
   .banner {
     display: flex;
+    width: 550px;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(163.85deg, #1d2129 0%, #00308f 100%);
 
     &-inner {
       flex: 1;

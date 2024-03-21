@@ -26,7 +26,7 @@ const useUserStore = defineStore('user', {
       //   throw err;
       // }
     },
-    // 登陆
+    // login
     async login(loginForm: LoginData) {
       try {
         const res = await userLogin(loginForm);
