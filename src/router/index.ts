@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { appRoutes } from './routers';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,7 +12,8 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/login/index.vue')
-    }
+    },
+    ...appRoutes
   ],
   scrollBehavior() {
     return { top: 0 };
