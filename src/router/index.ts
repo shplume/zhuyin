@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { appRoutes } from './routers';
 import { NOT_FOUND_ROUTE } from './routers/base';
 import createRouteGuard from './guard';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+
+NProgress.configure({ showSpinner: false });
 
 const router = createRouter({
   history: createWebHistory(),
