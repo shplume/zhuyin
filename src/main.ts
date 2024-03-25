@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import store from './store';
+import directive from './directive';
 import '@arco-design/web-vue/dist/arco.css';
 import '@/api/interceptor';
 import './mock';
@@ -18,5 +19,6 @@ app.use(store);
 app.use(ArcoVue);
 app.use(ArcoVueIcon);
 app.use(router);
+app.use(directive);
 
 app.mount('#app');
