@@ -1,9 +1,10 @@
 import type { AppRouteRecordRaw } from '../types';
+import { DEFAULT_LAYOUT } from '../base';
 
 const HOME: AppRouteRecordRaw = {
   path: '/home',
   name: 'home',
-  component: () => import('@/views/home/index.vue')
+  component: DEFAULT_LAYOUT
 };
 
 export default HOME;
