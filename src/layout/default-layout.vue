@@ -1,6 +1,12 @@
+<script setup>
+  import NavBar from '@/components/navbar/index.vue';
+</script>
+
 <template>
   <a-layout class="layout">
-    <a-layout-header class="layout-navbar"></a-layout-header>
+    <a-layout-header class="layout-navbar">
+      <NavBar />
+    </a-layout-header>
     <a-layout>
       <a-layout-sider class="layout-sider"></a-layout-sider>
     </a-layout>
