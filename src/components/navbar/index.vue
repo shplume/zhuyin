@@ -2,6 +2,7 @@
   import { computed } from 'vue';
   import { useAppStore, useUserStore } from '@/store';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
+  import useUser from '@/hooks/user';
 
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
 
@@ -29,6 +30,11 @@
   const toggleTheme = useToggle(isDark);
   const handleToggleTheme = () => {
     toggleTheme();
+  };
+
+  const { logout } = useUser();
+  const handleLogout = () => {
+    logout();
   };
 </script>
 
@@ -114,7 +120,7 @@
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space>
+              <a-space @click="handleLogout">
                 <icon-export />
                 <span> 登出登录 </span>
               </a-space>
@@ -126,7 +132,7 @@
   </div>
 </template>
 
-<style scoped lang="less">
+<style lang="less" scoped>
   .navbar {
     display: flex;
     justify-content: space-between;
