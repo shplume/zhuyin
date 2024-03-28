@@ -8,7 +8,7 @@
       <NavBar />
     </a-layout-header>
     <a-layout>
-      <a-layout-sider class="layout-sider"></a-layout-sider>
+      <a-layout-sider class="layout-sider"> </a-layout-sider>
     </a-layout>
   </a-layout>
 </template>

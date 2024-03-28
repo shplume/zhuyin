@@ -8,7 +8,8 @@ const useUserStore = defineStore('user', {
   state: (): UserState => ({
     userId: 0, // 用户 id
     account: '', // 用户名
-    role: '' // 权限
+    role: '', // 权限
+    avatar: '' // 头像
   }),
 
   getters: {
