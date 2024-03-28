@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { RouteRecordNormalized } from 'vue-router';
 
 export interface LoginData {
   account: string;
@@ -21,4 +22,8 @@ export function userRegister(data: RegisterData) {
 
 export function userInfo() {
   return axios.post('/api/v1/user/info');
+}
+
+export function getMenuList() {
+  return axios.post<RouteRecordNormalized[]>('/api/user/menu');
 }

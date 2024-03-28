@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { userRegister, userLogin, userInfo } from '@/api/use';
-import type { LoginData, RegisterData } from '@/api/use';
+import { userRegister, userLogin, userInfo } from '@/api/user';
+import type { LoginData, RegisterData } from '@/api/user';
 import { setToken, clearToken } from '@/utils/auth';
 import type { UserState } from './types';
 
