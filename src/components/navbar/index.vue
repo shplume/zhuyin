@@ -1,16 +1,13 @@
 <template>
   <div class="navbar">
-    <div class="left-side">
+    <div class="left-side" @click="$router.push({ name: 'Workplace' })">
       <a-space>
-        <img
-          alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-        />
+        <img alt="logo" src="../../assets/logo.png" width="33" />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          Arco Pro
+          论文评阅系统
         </a-typography-title>
         <icon-menu-fold
           v-if="!topMenu && appStore.device === 'mobile'"
@@ -275,6 +272,7 @@
     display: flex;
     align-items: center;
     padding-left: 20px;
+    cursor: pointer;
   }
 
   .center-side {
