@@ -1,11 +1,8 @@
 <template>
   <div class="container">
     <div class="logo">
-      <img
-        alt="logo"
-        src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-      />
-      <div class="logo-text">Arco Design Pro</div>
+      <img alt="logo" src="../../assets/logo.png" width="33" />
+      <div class="logo-text">论文评阅系统</div>
     </div>
     <LoginBanner />
     <div class="content">
@@ -62,7 +59,7 @@
 
     &-text {
       margin-right: 4px;
-      margin-left: 4px;
+      margin-left: 8px;
       color: var(--color-fill-1);
       font-size: 20px;
     }
