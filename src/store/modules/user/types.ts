@@ -1,6 +1,19 @@
+export type RoleType = '' | '*' | 'admin' | 'user';
 export interface UserState {
-  userId: number; // 用户 id
-  account: string; // 用户名
-  role: string; // 权限
-  avatar: string; // 头像
+  name?: string;
+  avatar?: string;
+  job?: string;
+  organization?: string;
+  location?: string;
+  email?: string;
+  introduction?: string;
+  personalWebsite?: string;
+  jobName?: string;
+  organizationName?: string;
+  locationName?: string;
+  phone?: string;
+  registrationDate?: string;
+  accountId?: string;
+  certification?: number;
+  role: RoleType;
 }

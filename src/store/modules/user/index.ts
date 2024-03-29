@@ -1,33 +1,66 @@
 import { defineStore } from 'pinia';
-import { userRegister, userLogin, userInfo } from '@/api/user';
-import type { LoginData, RegisterData } from '@/api/user';
+import {
+  login as userLogin,
+  logout as userLogout,
+  getUserInfo,
+  LoginData,
+} from '@/api/user';
 import { setToken, clearToken } from '@/utils/auth';
-import type { UserState } from './types';
+import { removeRouteListener } from '@/utils/route-listener';
+import { UserState } from './types';
+import useAppStore from '../app';
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    userId: 0, // 用户 id
-    account: '', // 用户名
-    role: '', // 权限
-    avatar: '' // 头像
+    name: undefined,
+    avatar: undefined,
+    job: undefined,
+    organization: undefined,
+    location: undefined,
+    email: undefined,
+    introduction: undefined,
+    personalWebsite: undefined,
+    jobName: undefined,
+    organizationName: undefined,
+    locationName: undefined,
+    phone: undefined,
+    registrationDate: undefined,
+    accountId: undefined,
+    certification: undefined,
+    role: '',
   }),
 
   getters: {
-    // userInfo(state: UserState): UserState {
-    //   return { ...state }
-    // },
+    userInfo(state: UserState): UserState {
+      return { ...state };
+    },
   },
 
   actions: {
-    // 注册
-    async register(registerForm: RegisterData) {
-      // try {
-      const res = await userRegister(registerForm);
-      // } catch (err) {
-      //   throw err;
-      // }
+    switchRoles() {
+      return new Promise((resolve) => {
+        this.role = this.role === 'user' ? 'admin' : 'user';
+        resolve(this.role);
+      });
     },
-    // login
+    // Set user's information
+    setInfo(partial: Partial<UserState>) {
+      this.$patch(partial);
+    },
+
+    // Reset user's information
+    resetInfo() {
+      this.$reset();
+    },
+
+    // Get user's information
+    async info() {
+      const res = await getUserInfo();
+
+      this.setInfo(res.data);
+    },
+
+    // Login
     async login(loginForm: LoginData) {
       try {
         const res = await userLogin(loginForm);
@@ -37,42 +70,22 @@ const useUserStore = defineStore('user', {
         throw err;
       }
     },
-    // 获取用户信息
-    async info() {
-      const res = await userInfo();
-      this.setInfo(res.data);
+    logoutCallBack() {
+      const appStore = useAppStore();
+      this.resetInfo();
+      clearToken();
+      removeRouteListener();
+      appStore.clearServerMenu();
     },
-    // 设置用户信息
-    setInfo(partial: UserState) {
-      this.$patch(partial);
-    },
-    // 注销
+    // Logout
     async logout() {
       try {
-        // await userLogout();
+        await userLogout();
       } finally {
         this.logoutCallBack();
       }
     },
-    // 注销 函数的回调
-    logoutCallBack() {
-      this.resetInfo();
-      clearToken();
-      // removeRouteListener();
-    },
-    // 重置用户信息
-    resetInfo() {
-      this.$reset();
-    },
-
-    // 切换角色
-    switchRoles() {
-      //   return new Promise((resolve) => {
-      //     this.role = this.role === "user" ? "admin" : "user"
-      //     resolve(this.role)
-      //   })
-    }
-  }
+  },
 });
 
 export default useUserStore;

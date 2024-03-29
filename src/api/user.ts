@@ -1,27 +1,25 @@
 import axios from 'axios';
 import type { RouteRecordNormalized } from 'vue-router';
+import { UserState } from '@/store/modules/user/types';
 
 export interface LoginData {
-  account: string;
+  username: string;
   password: string;
 }
 
-export function userLogin(data: LoginData) {
-  return axios.post('/api/v1/user/login', data);
+export interface LoginRes {
+  token: string;
+}
+export function login(data: LoginData) {
+  return axios.post<LoginRes>('/api/user/login', data);
 }
 
-export interface RegisterData {
-  account: string;
-  password: string;
-  email: string;
+export function logout() {
+  return axios.post<LoginRes>('/api/user/logout');
 }
 
-export function userRegister(data: RegisterData) {
-  return axios.post('/api/v1/user/register', data);
-}
-
-export function userInfo() {
-  return axios.post('/api/v1/user/info');
+export function getUserInfo() {
+  return axios.post<UserState>('/api/user/info');
 }
 
 export function getMenuList() {

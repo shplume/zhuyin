@@ -23,7 +23,7 @@
         },
         set(value: boolean) {
           appStore.updateSettings({ menuCollapse: value });
-        }
+        },
       });
 
       const topMenu = computed(() => appStore.topMenu);
@@ -45,7 +45,7 @@
         }
         // Trigger router change
         router.push({
-          name: item.name
+          name: item.name,
         });
       };
       const findMenuOpenKeys = (target: string) => {
@@ -80,7 +80,7 @@
           openKeys.value = [...keySet];
 
           selectedKey.value = [
-            activeMenu || menuOpenKeys[menuOpenKeys.length - 1]
+            activeMenu || menuOpenKeys[menuOpenKeys.length - 1],
           ];
         }
       }, true);
@@ -103,7 +103,7 @@
                     key={element?.name}
                     v-slots={{
                       icon,
-                      title: () => h(compile(t(element?.meta?.locale || '')))
+                      title: () => h(compile(t(element?.meta?.locale || ''))),
                     }}
                   >
                     {travel(element?.children)}
@@ -141,7 +141,7 @@
           {renderSubMenu()}
         </a-menu>
       );
-    }
+    },
   });
 </script>
 

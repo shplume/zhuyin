@@ -1,43 +1,3 @@
-<script setup>
-  import { computed } from 'vue';
-  import { useAppStore, useUserStore } from '@/store';
-  import { useDark, useToggle, useFullscreen } from '@vueuse/core';
-  import useUser from '@/hooks/user';
-
-  const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
-
-  const appStore = useAppStore();
-  const userStore = useUserStore();
-
-  const theme = computed(() => {
-    return appStore.theme;
-  });
-  const avatar = computed(() => {
-    return userStore.avatar;
-  });
-
-  const isDark = useDark({
-    selector: 'body',
-    attribute: 'arco-theme',
-    valueDark: 'dark',
-    valueLight: 'light',
-    storageKey: 'arco-theme',
-    onChanged(dark) {
-      // overridden default behavior
-      appStore.toggleTheme(dark);
-    }
-  });
-  const toggleTheme = useToggle(isDark);
-  const handleToggleTheme = () => {
-    toggleTheme();
-  };
-
-  const { logout } = useUser();
-  const handleLogout = () => {
-    logout();
-  };
-</script>
-
 <template>
   <div class="navbar">
     <div class="left-side">
@@ -52,14 +12,61 @@
         >
           Arco Pro
         </a-typography-title>
+        <icon-menu-fold
+          v-if="!topMenu && appStore.device === 'mobile'"
+          style="font-size: 22px; cursor: pointer"
+          @click="toggleDrawerMenu"
+        />
       </a-space>
     </div>
-    <div class="center-side"></div>
+    <div class="center-side">
+      <Menu v-if="topMenu" />
+    </div>
     <ul class="right-side">
+      <li>
+        <a-tooltip :content="$t('settings.search')">
+          <a-button class="nav-btn" type="outline" :shape="'circle'">
+            <template #icon>
+              <icon-search />
+            </template>
+          </a-button>
+        </a-tooltip>
+      </li>
+      <li>
+        <a-tooltip :content="$t('settings.language')">
+          <a-button
+            class="nav-btn"
+            type="outline"
+            :shape="'circle'"
+            @click="setDropDownVisible"
+          >
+            <template #icon>
+              <icon-language />
+            </template>
+          </a-button>
+        </a-tooltip>
+        <a-dropdown trigger="click" @select="changeLocale as any">
+          <div ref="triggerBtn" class="trigger-btn"></div>
+          <template #content>
+            <a-doption
+              v-for="item in locales"
+              :key="item.value"
+              :value="item.value"
+            >
+              <template #icon>
+                <icon-check v-show="item.value === currentLocale" />
+              </template>
+              {{ item.label }}
+            </a-doption>
+          </template>
+        </a-dropdown>
+      </li>
       <li>
         <a-tooltip
           :content="
-            theme === 'light' ? '点击切换为暗黑模式' : '点击切换为亮色模式'
+            theme === 'light'
+              ? $t('settings.navbar.theme.toDark')
+              : $t('settings.navbar.theme.toLight')
           "
         >
           <a-button
@@ -76,8 +83,39 @@
         </a-tooltip>
       </li>
       <li>
+        <a-tooltip :content="$t('settings.navbar.alerts')">
+          <div class="message-box-trigger">
+            <a-badge :count="9" dot>
+              <a-button
+                class="nav-btn"
+                type="outline"
+                :shape="'circle'"
+                @click="setPopoverVisible"
+              >
+                <icon-notification />
+              </a-button>
+            </a-badge>
+          </div>
+        </a-tooltip>
+        <a-popover
+          trigger="click"
+          :arrow-style="{ display: 'none' }"
+          :content-style="{ padding: 0, minWidth: '400px' }"
+          content-class="message-popover"
+        >
+          <div ref="refBtn" class="ref-btn"></div>
+          <template #content>
+            <message-box />
+          </template>
+        </a-popover>
+      </li>
+      <li>
         <a-tooltip
-          :content="isFullscreen ? '点击退出全屏模式' : '点击切换全屏模式'"
+          :content="
+            isFullscreen
+              ? $t('settings.navbar.screen.toExit')
+              : $t('settings.navbar.screen.toFull')
+          "
         >
           <a-button
             class="nav-btn"
@@ -93,6 +131,20 @@
         </a-tooltip>
       </li>
       <li>
+        <a-tooltip :content="$t('settings.title')">
+          <a-button
+            class="nav-btn"
+            type="outline"
+            :shape="'circle'"
+            @click="setVisible"
+          >
+            <template #icon>
+              <icon-settings />
+            </template>
+          </a-button>
+        </a-tooltip>
+      </li>
+      <li>
         <a-dropdown trigger="click">
           <a-avatar
             :size="32"
@@ -102,27 +154,35 @@
           </a-avatar>
           <template #content>
             <a-doption>
-              <a-space>
+              <a-space @click="switchRoles">
                 <icon-tag />
-                <span> 切换角色 </span>
+                <span>
+                  {{ $t('messageBox.switchRoles') }}
+                </span>
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space>
+              <a-space @click="$router.push({ name: 'Info' })">
                 <icon-user />
-                <span> 用户中心 </span>
+                <span>
+                  {{ $t('messageBox.userCenter') }}
+                </span>
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space>
+              <a-space @click="$router.push({ name: 'Setting' })">
                 <icon-settings />
-                <span> 用户设置 </span>
+                <span>
+                  {{ $t('messageBox.userSettings') }}
+                </span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="handleLogout">
                 <icon-export />
-                <span> 登出登录 </span>
+                <span>
+                  {{ $t('messageBox.logout') }}
+                </span>
               </a-space>
             </a-doption>
           </template>
@@ -132,7 +192,77 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<script lang="ts" setup>
+  import { computed, ref, inject } from 'vue';
+  import { Message } from '@arco-design/web-vue';
+  import { useDark, useToggle, useFullscreen } from '@vueuse/core';
+  import { useAppStore, useUserStore } from '@/store';
+  import { LOCALE_OPTIONS } from '@/locale';
+  import useLocale from '@/hooks/locale';
+  import useUser from '@/hooks/user';
+  import Menu from '@/components/menu/index.vue';
+  import MessageBox from '../message-box/index.vue';
+
+  const appStore = useAppStore();
+  const userStore = useUserStore();
+  const { logout } = useUser();
+  const { changeLocale, currentLocale } = useLocale();
+  const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
+  const locales = [...LOCALE_OPTIONS];
+  const avatar = computed(() => {
+    return userStore.avatar;
+  });
+  const theme = computed(() => {
+    return appStore.theme;
+  });
+  const topMenu = computed(() => appStore.topMenu && appStore.menu);
+  const isDark = useDark({
+    selector: 'body',
+    attribute: 'arco-theme',
+    valueDark: 'dark',
+    valueLight: 'light',
+    storageKey: 'arco-theme',
+    onChanged(dark: boolean) {
+      // overridden default behavior
+      appStore.toggleTheme(dark);
+    },
+  });
+  const toggleTheme = useToggle(isDark);
+  const handleToggleTheme = () => {
+    toggleTheme();
+  };
+  const setVisible = () => {
+    appStore.updateSettings({ globalSettings: true });
+  };
+  const refBtn = ref();
+  const triggerBtn = ref();
+  const setPopoverVisible = () => {
+    const event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    refBtn.value.dispatchEvent(event);
+  };
+  const handleLogout = () => {
+    logout();
+  };
+  const setDropDownVisible = () => {
+    const event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    triggerBtn.value.dispatchEvent(event);
+  };
+  const switchRoles = async () => {
+    const res = await userStore.switchRoles();
+    Message.success(res as string);
+  };
+  const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
+</script>
+
+<style scoped lang="less">
   .navbar {
     display: flex;
     justify-content: space-between;

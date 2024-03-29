@@ -7,17 +7,17 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
   const back = () => {
     // warning： Go to the node that has the permission
-    router.push({ name: 'home' });
+    router.push({ name: 'Workplace' });
   };
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
   .content {
     // padding-top: 100px;
     position: absolute;

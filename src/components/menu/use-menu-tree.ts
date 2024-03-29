@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import type { RouteRecordRaw, RouteRecordNormalized } from 'vue-router';
+import { RouteRecordRaw, RouteRecordNormalized } from 'vue-router';
 import usePermission from '@/hooks/permission';
 import { useAppStore } from '@/store';
 import appClientMenus from '@/router/app-menus';
@@ -64,6 +64,6 @@ export default function useMenuTree() {
   });
 
   return {
-    menuTree
+    menuTree,
   };
 }
