@@ -26,9 +26,20 @@ import locale500 from '@/views/exception/500/locale/en-US';
 import localeUserInfo from '@/views/user/info/locale/en-US';
 import localeUserSetting from '@/views/user/setting/locale/en-US';
 
+// -------------
+
+import localeThesisState from '@/views/my-thesis/thesis-state/locale/en-US';
+import localeThesisUpload from '@/views/my-thesis/thesis-upload/locale/en-US';
+
 import localeSettings from './en-US/settings';
 
 export default {
+  'menu.myThesis': 'my thesis',
+  ...localeThesisState,
+  ...localeThesisUpload,
+
+  // -------------
+
   'menu.dashboard': 'Dashboard',
   'menu.server.dashboard': 'Dashboard-Server',
   'menu.server.workplace': 'Workplace-Server',

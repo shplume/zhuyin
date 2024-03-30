@@ -26,9 +26,20 @@ import locale500 from '@/views/exception/500/locale/zh-CN';
 import localeUserInfo from '@/views/user/info/locale/zh-CN';
 import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 
+// -------------
+
+import localeThesisState from '@/views/my-thesis/thesis-state/locale/zh-CN';
+import localeThesisUpload from '@/views/my-thesis/thesis-upload/locale/zh-CN';
+
 import localeSettings from './zh-CN/settings';
 
 export default {
+  'menu.myThesis': '我的论文',
+  ...localeThesisState,
+  ...localeThesisUpload,
+
+  // -------------
+
   'menu.dashboard': '仪表盘',
   'menu.server.dashboard': '仪表盘-服务端',
   'menu.server.workplace': '工作台-服务端',
