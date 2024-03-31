@@ -65,7 +65,7 @@
           });
           const { redirect, ...othersQuery } = router.currentRoute.value.query;
           router.push({
-            name: redirect || 'home',
+            name: redirect || 'myThesis',
             query: {
               ...othersQuery,
             },
@@ -164,7 +164,7 @@
         </a-form-item>
 
         <a-form-item
-          v-if="!isRegister"
+          v-if="isRegister"
           field="identity"
           label="Section"
           :rules="[{ required: true, message: '身份不能为空' }]"

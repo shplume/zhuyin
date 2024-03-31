@@ -9,7 +9,7 @@ const MYTHESIS: AppRouteRecordRaw = {
     locale: 'menu.myThesis',
     icon: 'icon-bookmark',
     requiresAuth: true,
-    order: -1,
+    order: 0,
   },
   children: [
     {
