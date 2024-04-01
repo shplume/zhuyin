@@ -165,27 +165,6 @@
 
         <a-form-item
           v-if="isRegister"
-          field="identity"
-          label="Section"
-          :rules="[{ required: true, message: '身份不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-select
-            v-model="userAndRegisterInfo.identity"
-            placeholder="身份"
-            allow-clear
-          >
-            <a-option value="teacher">老师</a-option>
-            <a-option value="student">学生</a-option>
-            <template #prefix>
-              <icon-user-group />
-            </template>
-          </a-select>
-        </a-form-item>
-
-        <a-form-item
-          v-if="isRegister"
           field="confirmPassword"
           :rules="[
             {
@@ -214,6 +193,27 @@
               <icon-lock />
             </template>
           </a-input-password>
+        </a-form-item>
+
+        <a-form-item
+          v-if="isRegister"
+          field="identity"
+          label="Section"
+          :rules="[{ required: true, message: '身份不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-select
+            v-model="userAndRegisterInfo.identity"
+            placeholder="身份"
+            allow-clear
+          >
+            <a-option value="teacher">老师</a-option>
+            <a-option value="student">学生</a-option>
+            <template #prefix>
+              <icon-user-group />
+            </template>
+          </a-select>
         </a-form-item>
 
         <a-form-item
