@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
   import { ref, reactive, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
