@@ -13,8 +13,8 @@ const THESISMANAGE: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: 'thesisUpload',
-      name: 'thesisUpload',
+      path: 'thesisReview',
+      name: 'thesisReview',
       component: () => import('@/views/thesis-manage/thesis-review/index.vue'),
       meta: {
         locale: 'menu.thesisManage.review',
