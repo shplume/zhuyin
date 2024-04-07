@@ -1,30 +1,30 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['menu.thesisManage', 'menu.thesisManage.review']" />
-    <a-row :gutter="20" align="stretch">
+    <a-row :gutter="20" :align="'stretch'">
       <a-col :span="24">
-        <a-card class="general-card" :title="$t('menu.list.cardList')">
+        <a-card class="general-card" :title="'论文评阅'">
           <a-row justify="space-between">
             <a-col :span="24">
               <a-tabs :default-active-tab="1" type="rounded">
-                <a-tab-pane key="1" :title="$t('cardList.tab.title.all')">
+                <a-tab-pane key="1" :title="'全部'">
                   <QualityInspection />
                   <TheService />
                   <RulesPreset />
                 </a-tab-pane>
-                <a-tab-pane key="2" :title="$t('cardList.tab.title.content')">
+                <a-tab-pane key="2" :title="'待评阅'">
                   <QualityInspection />
                 </a-tab-pane>
-                <a-tab-pane key="3" :title="$t('cardList.tab.title.service')">
+                <a-tab-pane key="3" :title="'评阅中'">
                   <TheService />
                 </a-tab-pane>
-                <a-tab-pane key="4" :title="$t('cardList.tab.title.preset')">
+                <a-tab-pane key="4" :title="'评阅完成'">
                   <RulesPreset />
                 </a-tab-pane>
               </a-tabs>
             </a-col>
             <a-input-search
-              :placeholder="$t('cardList.searchInput.placeholder')"
+              :placeholder="'搜索'"
               style="width: 240px; position: absolute; top: 60px; right: 20px"
             />
           </a-row>
@@ -38,12 +38,6 @@
   import QualityInspection from './components/quality-inspection.vue';
   import TheService from './components/the-service.vue';
   import RulesPreset from './components/rules-preset.vue';
-</script>
-
-<script lang="ts">
-  export default {
-    name: 'Card',
-  };
 </script>
 
 <style scoped lang="less">

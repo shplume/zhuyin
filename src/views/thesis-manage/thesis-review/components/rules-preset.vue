@@ -1,7 +1,7 @@
 <template>
   <div class="list-wrap">
     <a-typography-title class="block-title" :heading="6">
-      {{ $t('cardList.tab.title.preset') }}
+      评阅完成
     </a-typography-title>
     <a-row class="list-row" :gutter="24">
       <a-col
