@@ -14,12 +14,12 @@
           <a-step>{{ '评阅完成' }}</a-step>
         </a-steps>
       </a-card>
-      <a-card class="general-card">
+      <!-- <a-card class="general-card">
         <ProfileItem :loading="loading" :render-data="currentData" />
       </a-card>
       <a-card class="general-card">
         <ProfileItem :loading="preLoading" type="pre" :render-data="preData" />
-      </a-card>
+      </a-card> -->
       <OperationLog />
     </a-space>
   </div>
@@ -29,7 +29,7 @@
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
   // import { queryProfileBasic, ProfileBasicRes } from '@/api/profile';
-  import ProfileItem from './components/profile-item.vue';
+  // import ProfileItem from './components/profile-item.vue';
   import OperationLog from './components/operation-log.vue';
 
   const { loading, setLoading } = useLoading(true);
