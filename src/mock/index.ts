@@ -5,6 +5,9 @@ import '@/views/login/mock';
 import '@/views/thesis-manage/thesis-inquiry/mock';
 import '@/views/thesis-manage/thesis-review/mock';
 
+import '@/views/user/info/mock';
+import '@/views/user/setting/mock';
+
 Mock.setup({
   timeout: '600-1000',
 });
