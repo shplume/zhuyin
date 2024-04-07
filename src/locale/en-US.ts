@@ -3,6 +3,7 @@ import localeLogin from '@/views/login/locale/en-US';
 
 import localeThesisState from '@/views/my-thesis/thesis-state/locale/en-US';
 import localeThesisUpload from '@/views/my-thesis/thesis-upload/locale/en-US';
+import localeThesisInquiry from '@/views/thesis-manage/thesis-inquiry/locale/en-US';
 import localeThesisReview from '@/views/thesis-manage/thesis-review/locale/en-US';
 
 import localeSettings from './en-US/settings';
@@ -15,5 +16,6 @@ export default {
   ...localeLogin,
   ...localeThesisState,
   ...localeThesisUpload,
+  ...localeThesisInquiry,
   ...localeThesisReview,
 };

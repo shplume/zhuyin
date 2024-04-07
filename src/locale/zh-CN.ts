@@ -3,6 +3,7 @@ import localeLogin from '@/views/login/locale/zh-CN';
 
 import localeThesisState from '@/views/my-thesis/thesis-state/locale/zh-CN';
 import localeThesisUpload from '@/views/my-thesis/thesis-upload/locale/zh-CN';
+import localeThesisInquiry from '@/views/thesis-manage/thesis-inquiry/locale/zh-CN';
 import localeThesisReview from '@/views/thesis-manage/thesis-review/locale/zh-CN';
 
 import localeSettings from './zh-CN/settings';
@@ -15,5 +16,6 @@ export default {
   ...localeLogin,
   ...localeThesisState,
   ...localeThesisUpload,
+  ...localeThesisInquiry,
   ...localeThesisReview,
 };

@@ -9,9 +9,19 @@ const THESISMANAGE: AppRouteRecordRaw = {
     locale: 'menu.thesisManage',
     icon: 'icon-archive',
     requiresAuth: true,
-    order: 0,
+    order: 1,
   },
   children: [
+    {
+      path: 'thesisInquiry',
+      name: 'thesisInquiry',
+      component: () => import('@/views/thesis-manage/thesis-inquiry/index.vue'),
+      meta: {
+        locale: 'menu.thesisManage.inquiry',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
     {
       path: 'thesisReview',
       name: 'thesisReview',
