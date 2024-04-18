@@ -59,27 +59,6 @@
         </a-dropdown>
       </li>
       <li>
-        <a-tooltip
-          :content="
-            theme === 'light'
-              ? $t('settings.navbar.theme.toDark')
-              : $t('settings.navbar.theme.toLight')
-          "
-        >
-          <a-button
-            class="nav-btn"
-            type="outline"
-            :shape="'circle'"
-            @click="handleToggleTheme"
-          >
-            <template #icon>
-              <icon-moon-fill v-if="theme === 'dark'" />
-              <icon-sun-fill v-else />
-            </template>
-          </a-button>
-        </a-tooltip>
-      </li>
-      <li>
         <a-tooltip :content="$t('settings.navbar.alerts')">
           <div class="message-box-trigger">
             <a-badge :count="9" dot>
@@ -192,7 +171,7 @@
 <script lang="ts" setup>
   import { computed, ref, inject } from 'vue';
   import { Message } from '@arco-design/web-vue';
-  import { useDark, useToggle, useFullscreen } from '@vueuse/core';
+  import { useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
@@ -209,25 +188,7 @@
   const avatar = computed(() => {
     return userStore.avatar;
   });
-  const theme = computed(() => {
-    return appStore.theme;
-  });
   const topMenu = computed(() => appStore.topMenu && appStore.menu);
-  const isDark = useDark({
-    selector: 'body',
-    attribute: 'arco-theme',
-    valueDark: 'dark',
-    valueLight: 'light',
-    storageKey: 'arco-theme',
-    onChanged(dark: boolean) {
-      // overridden default behavior
-      appStore.toggleTheme(dark);
-    },
-  });
-  const toggleTheme = useToggle(isDark);
-  const handleToggleTheme = () => {
-    toggleTheme();
-  };
   const setVisible = () => {
     appStore.updateSettings({ globalSettings: true });
   };
