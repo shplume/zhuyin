@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-    <div class="logo">
-      <img alt="logo" src="../../assets/logo.png" width="33" />
-      <div class="logo-text">论文评阅系统</div>
-    </div>
-    <LoginBanner />
+    <div class="logo"></div>
     <div class="content">
       <div class="content-inner">
         <LoginForm />
@@ -18,7 +14,6 @@
 
 <script lang="ts" setup>
   import Footer from '@/components/footer/index.vue';
-  import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
 </script>
 
@@ -29,7 +24,6 @@
 
     .banner {
       width: 550px;
-      background: linear-gradient(163.85deg, #1d2129 0%, #00308f 100%);
     }
 
     .content {
@@ -63,6 +57,11 @@
       color: var(--color-fill-1);
       font-size: 20px;
     }
+  }
+
+  .font {
+    font-size: 20px;
+    font-weight: 400;
   }
 </style>
 

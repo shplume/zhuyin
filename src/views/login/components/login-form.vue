@@ -118,216 +118,220 @@
 </script>
 
 <template>
-  <div class="login-form-wrapper">
-    <div class="login-form-title">
-      {{ !isRegister ? '登录' : '注册' }}
-    </div>
-    <a-form
-      ref="loginForm"
-      :model="userAndRegisterInfo"
-      class="login-form"
-      layout="vertical"
-      @submit="handleSubmit"
-    >
-      <TransitionGroup name="list" tag="div">
-        <a-form-item
-          field="account"
-          :rules="[{ required: true, message: '用户名不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-input
-            v-model="userAndRegisterInfo.account"
-            :placeholder="'用户名'"
+  <div class="box">
+    <div class="login-form-wrapper">
+      <div class="picture">
+        <img alt="logo" src="../../../assets/logo.png" width="35" />
+        <img alt="font" src="../../../assets/art_font.png" width="160s" />
+      </div>
+      <a-form
+        ref="loginForm"
+        :model="userAndRegisterInfo"
+        class="login-form"
+        layout="vertical"
+        @submit="handleSubmit"
+      >
+        <TransitionGroup name="list" tag="div">
+          <a-form-item
+            field="account"
+            :rules="[{ required: true, message: '用户名不能为空' }]"
+            :validate-trigger="['change', 'blur']"
+            hide-label
           >
-            <template #prefix>
-              <icon-user />
-            </template>
-          </a-input>
-        </a-form-item>
+            <a-input
+              v-model="userAndRegisterInfo.account"
+              :placeholder="'用户名'"
+            >
+              <template #prefix>
+                <icon-user />
+              </template>
+            </a-input>
+          </a-form-item>
 
-        <a-form-item
-          field="password"
-          :rules="[{ required: true, message: '密码不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-input-password
-            v-model="userAndRegisterInfo.password"
-            :placeholder="'密码'"
-            allow-clear
+          <a-form-item
+            field="password"
+            :rules="[{ required: true, message: '密码不能为空' }]"
+            :validate-trigger="['change', 'blur']"
+            hide-label
           >
-            <template #prefix>
-              <icon-lock />
-            </template>
-          </a-input-password>
-        </a-form-item>
+            <a-input-password
+              v-model="userAndRegisterInfo.password"
+              :placeholder="'密码'"
+              allow-clear
+            >
+              <template #prefix>
+                <icon-lock />
+              </template>
+            </a-input-password>
+          </a-form-item>
 
-        <a-form-item
-          v-if="isRegister"
-          field="confirmPassword"
-          :rules="[
-            {
-              required: true,
-              message: '密码不能为空',
-            },
-            {
-              validator: (value, cb) => {
-                if (value !== userAndRegisterInfo.password) {
-                  cb('两个密码不匹配');
-                } else {
-                  cb();
-                }
+          <a-form-item
+            v-if="isRegister"
+            field="confirmPassword"
+            :rules="[
+              {
+                required: true,
+                message: '密码不能为空',
               },
-            },
-          ]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-input-password
-            v-model="userAndRegisterInfo.confirmPassword"
-            :placeholder="'确认密码'"
-            allow-clear
+              {
+                validator: (value, cb) => {
+                  if (value !== userAndRegisterInfo.password) {
+                    cb('两个密码不匹配');
+                  } else {
+                    cb();
+                  }
+                },
+              },
+            ]"
+            :validate-trigger="['change', 'blur']"
+            hide-label
           >
-            <template #prefix>
-              <icon-lock />
-            </template>
-          </a-input-password>
-        </a-form-item>
+            <a-input-password
+              v-model="userAndRegisterInfo.confirmPassword"
+              :placeholder="'确认密码'"
+              allow-clear
+            >
+              <template #prefix>
+                <icon-lock />
+              </template>
+            </a-input-password>
+          </a-form-item>
 
-        <a-form-item
-          v-if="isRegister"
-          field="identity"
-          label="Section"
-          :rules="[{ required: true, message: '身份不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-select
-            v-model="userAndRegisterInfo.identity"
-            placeholder="身份"
-            allow-clear
+          <a-form-item
+            v-if="isRegister"
+            field="identity"
+            label="Section"
+            :rules="[{ required: true, message: '身份不能为空' }]"
+            :validate-trigger="['change', 'blur']"
+            hide-label
           >
-            <a-option value="teacher">老师</a-option>
-            <a-option value="student">学生</a-option>
-            <template #prefix>
-              <icon-user-group />
-            </template>
-          </a-select>
-        </a-form-item>
+            <a-select
+              v-model="userAndRegisterInfo.identity"
+              placeholder="身份"
+              allow-clear
+            >
+              <a-option value="teacher">老师</a-option>
+              <a-option value="student">学生</a-option>
+              <template #prefix>
+                <icon-user-group />
+              </template>
+            </a-select>
+          </a-form-item>
 
-        <a-form-item
-          v-if="isRegister"
-          field="email"
-          :rules="[
-            { required: true, message: '邮箱不能为空' },
-            { type: 'email', message: '邮箱格式不正确' },
-          ]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-input
-            v-model="userAndRegisterInfo.email"
-            :placeholder="'邮箱'"
-            allow-clear
+          <a-form-item
+            v-if="isRegister"
+            field="email"
+            :rules="[
+              { required: true, message: '邮箱不能为空' },
+              { type: 'email', message: '邮箱格式不正确' },
+            ]"
+            :validate-trigger="['change', 'blur']"
+            hide-label
           >
-            <template #prefix>
-              <icon-email />
-            </template>
-          </a-input>
-        </a-form-item>
+            <a-input
+              v-model="userAndRegisterInfo.email"
+              :placeholder="'邮箱'"
+              allow-clear
+            >
+              <template #prefix>
+                <icon-email />
+              </template>
+            </a-input>
+          </a-form-item>
 
-        <a-form-item
-          v-if="isRegister"
-          field="verify"
-          :rules="[{ required: true, message: '验证码不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <a-input
-            v-model="userAndRegisterInfo.verify"
-            :placeholder="'验证码'"
-            allow-clear
+          <a-form-item
+            v-if="isRegister"
+            field="verify"
+            :rules="[{ required: true, message: '验证码不能为空' }]"
+            :validate-trigger="['change', 'blur']"
+            hide-label
           >
-            <template #prefix>
-              <icon-safe />
-            </template>
-          </a-input>
-          <img
-            class="verify-image"
-            :src="verifyImageSrc"
-            @click="getVerifyImageInfo"
-          />
-        </a-form-item>
-      </TransitionGroup>
+            <a-input
+              v-model="userAndRegisterInfo.verify"
+              :placeholder="'验证码'"
+              allow-clear
+            >
+              <template #prefix>
+                <icon-safe />
+              </template>
+            </a-input>
+            <img
+              class="verify-image"
+              :src="verifyImageSrc"
+              @click="getVerifyImageInfo"
+            />
+          </a-form-item>
+        </TransitionGroup>
 
-      <a-space :size="16" direction="vertical">
-        <div v-if="!isRegister" class="login-form-password-actions">
-          <a-checkbox
-            checked="rememberPassword"
-            :model-value="loginConfig.rememberPassword"
-            @change="
-              (value) => {
-                loginConfig.rememberPassword = value;
+        <a-space :size="16" direction="vertical">
+          <div v-if="!isRegister" class="login-form-password-actions">
+            <a-checkbox
+              checked="rememberPassword"
+              :model-value="loginConfig.rememberPassword"
+              @change="
+                (value) => {
+                  loginConfig.rememberPassword = value;
+                }
+              "
+            >
+              {{ '记住密码' }}
+            </a-checkbox>
+            <a-link class="font">{{ '忘记密码' }}</a-link>
+          </div>
+
+          <div v-if="isRegister" class="login-form-password-actions">
+            <a-space size="mini">
+              <a-checkbox
+                checked="rememberPassword"
+                :model-value="userAgreement.selected"
+                @change="
+                  (value) => {
+                    userAgreement.selected = value;
+                  }
+                "
+              >
+                {{ '我已阅读并接受' }}
+              </a-checkbox>
+              <a-link>{{ '用户协议' }}</a-link>
+            </a-space>
+
+            <div>
+              已有账号
+              <a-link
+                @click="
+                  () => {
+                    isRegister = false;
+                    $refs.loginForm.clearValidate();
+                  }
+                "
+              >
+                {{ '直接登录' }}
+              </a-link>
+            </div>
+          </div>
+
+          <a-button type="primary" html-type="submit" long>
+            {{ !isRegister ? '登录' : '注册' }}
+          </a-button>
+          <a-button
+            v-show="!isRegister"
+            type="text"
+            long
+            class="login-form-register-btn"
+            @click="
+              () => {
+                isRegister = true;
+                $refs.loginForm.resetFields();
+                $refs.loginForm.clearValidate();
               }
             "
           >
-            {{ '记住密码' }}
-          </a-checkbox>
-          <a-link>{{ '忘记密码' }}</a-link>
-        </div>
-
-        <div v-if="isRegister" class="login-form-password-actions">
-          <a-space size="mini">
-            <a-checkbox
-              checked="rememberPassword"
-              :model-value="userAgreement.selected"
-              @change="
-                (value) => {
-                  userAgreement.selected = value;
-                }
-              "
-            >
-              {{ '我已阅读并接受' }}
-            </a-checkbox>
-            <a-link>{{ '用户协议' }}</a-link>
-          </a-space>
-
-          <div>
-            已有账号
-            <a-link
-              @click="
-                () => {
-                  isRegister = false;
-                  $refs.loginForm.clearValidate();
-                }
-              "
-            >
-              {{ '直接登录' }}
-            </a-link>
-          </div>
-        </div>
-
-        <a-button type="primary" html-type="submit" long>
-          {{ !isRegister ? '登录' : '注册' }}
-        </a-button>
-        <a-button
-          v-show="!isRegister"
-          type="text"
-          long
-          class="login-form-register-btn"
-          @click="
-            () => {
-              isRegister = true;
-              $refs.loginForm.resetFields();
-              $refs.loginForm.clearValidate();
-            }
-          "
-        >
-          {{ '注册账号' }}
-        </a-button>
-      </a-space>
-    </a-form>
+            {{ '注册账号' }}
+          </a-button>
+        </a-space>
+        <div class="br"></div>
+      </a-form>
+    </div>
   </div>
 </template>
 
@@ -344,9 +348,29 @@
 </style>
 
 <style lang="less" scoped>
+  .br {
+    margin-bottom: 20px;
+  }
+
+  .box {
+    width: 400px;
+    height: 400%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px #05050547;
+    border-radius: 20px 20px 20px 20px;
+  }
+
+  .font {
+    color: rgba(0, 0, 0, 0.648);
+  }
+
   .login-form {
     &-wrapper {
       width: 360px;
+      height: 400%;
     }
 
     &-title {
@@ -364,12 +388,20 @@
     }
 
     &-register-btn {
-      color: var(--color-text-3) !important;
+      color: rgba(0, 0, 0, 0.733);
     }
   }
 
   .verify-image {
     margin-left: 16px;
     cursor: pointer;
+  }
+
+  .picture {
+    flex: 2;
+    display: block;
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 </style>
