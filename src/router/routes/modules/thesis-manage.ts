@@ -32,6 +32,16 @@ const THESISMANAGE: AppRouteRecordRaw = {
         roles: ['*'],
       },
     },
+    {
+      path: 'thesisView',
+      name: 'thesisView',
+      component: () => import('@/views/thesis-manage/thesis-view/index.vue'),
+      meta: {
+        locale: '评阅界面',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
 
