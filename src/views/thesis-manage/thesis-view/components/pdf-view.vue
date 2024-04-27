@@ -3,10 +3,9 @@
 </template>
 
 <script setup>
-  // 导入PDFObject
   import PDFObject from 'pdfobject';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  import { ref, onMounted } from 'vue';
+  import { onMounted } from 'vue';
 
   onMounted(() => {
     const url = 'https://soft.xiaoz.org/office/hee%20hee.pdf';
@@ -14,4 +13,9 @@
   });
 </script>
 
-<style scoped></style>
+<style scoped>
+  .pdfobject-container {
+    height: 100%;
+    width: 100%;
+  }
+</style>
