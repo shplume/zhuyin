@@ -1,225 +1,265 @@
 <template>
   <div>
     <a-space direction="vertical" fill>
-      <a-input
-        :style="{ width: '320px' }"
-        placeholder="教师姓名"
-        allow-clear
-        disabled
-      >
-        <template #prepend> 批改教师 </template>
-      </a-input>
-      <a-input
-        :style="{ width: '320px' }"
-        placeholder="批改日期"
-        allow-clear
-        disabled
-      >
-        <template #prepend> <div class="fontColour">批改日期</div> </template>
-      </a-input>
-      <a-input-number
-        :style="{ width: '100%' }"
-        placeholder="Please enter something"
-        allow-clear
-      >
-        <template #prefix>
-          <a-button
-            type="dashed"
-            shape="circle"
-            style="width: 100px; font-weight: bold"
-            @click="handleClick"
-          >
-            论文选题
-          </a-button>
-          <a-drawer
-            :width="340"
-            :visible="visible"
-            placement="left"
-            unmount-on-close
-            @ok="handleOk"
-            @cancel="handleCancel"
-          >
-            <template #title> Title </template>
-            <div
-              >You can customize modal body text by the current situation. This
-              modal will be closed immediately once you press the OK button.
-            </div>
-          </a-drawer>
-        </template>
-      </a-input-number>
-      <a-input-number
-        :style="{ width: '100%' }"
-        placeholder="Please enter something"
-        allow-clear
-      >
-        <template #prefix>
-          <a-button
-            type="dashed"
-            shape="circle"
-            style="width: 100px; font-weight: bold"
-            @click="handleClick"
-          >
-            文献综述
-          </a-button>
-          <a-drawer
-            :width="340"
-            :visible="visible"
-            placement="left"
-            unmount-on-close
-            @ok="handleOk"
-            @cancel="handleCancel"
-          >
-            <template #title> Title </template>
-            <div
-              >You can customize modal body text by the current situation. This
-              modal will be closed immediately once you press the OK button.
-            </div>
-          </a-drawer>
-        </template>
-      </a-input-number>
-      <a-input-number
-        :style="{ width: '100%' }"
-        placeholder="Please enter something"
-        allow-clear
-      >
-        <template #prefix>
-          <a-button
-            type="dashed"
-            shape="circle"
-            style="width: 100px; font-weight: bold"
-            @click="handleClick"
-          >
-            研究成果
-          </a-button>
-          <a-drawer
-            :width="340"
-            :visible="visible"
-            placement="left"
-            unmount-on-close
-            @ok="handleOk"
-            @cancel="handleCancel"
-          >
-            <template #title> Title </template>
-            <div
-              >You can customize modal body text by the current situation. This
-              modal will be closed immediately once you press the OK button.
-            </div>
-          </a-drawer>
-        </template>
-      </a-input-number>
-      <a-input-number
-        :style="{ width: '100%' }"
-        placeholder="Please enter something"
-        allow-clear
-      >
-        <template #prefix>
-          <a-button
-            type="dashed"
-            shape="circle"
-            style="width: 100px; font-weight: bold"
-            @click="handleClick"
-          >
-            科研水平
-          </a-button>
-          <a-drawer
-            :width="340"
-            :visible="visible"
-            placement="left"
-            unmount-on-close
-            @ok="handleOk"
-            @cancel="handleCancel"
-          >
-            <template #title> Title </template>
-            <div
-              >You can customize modal body text by the current situation. This
-              modal will be closed immediately once you press the OK button.
-            </div>
-          </a-drawer>
-        </template>
-      </a-input-number>
-      <a-input-number
-        :style="{ width: '100%' }"
-        placeholder="Please enter something"
-        allow-clear
-      >
-        <template #prefix>
-          <a-button
-            type="dashed"
-            shape="circle"
-            style="width: 100px; font-weight: bold"
-            @click="handleClick"
-          >
-            学风和写作
-          </a-button>
-          <a-drawer
-            :width="340"
-            :visible="visible"
-            placement="left"
-            unmount-on-close
-            @ok="handleOk"
-            @cancel="handleCancel"
-          >
-            <template #title> Title </template>
-            <div
-              >You can customize modal body text by the current situation. This
-              modal will be closed immediately once you press the OK button.
-            </div>
-          </a-drawer>
-        </template>
-      </a-input-number>
+      <div class="divider-demo">
+        <span style="flex: 30%">批改教师</span>
+        <a-divider direction="vertical" />
+        <span style="flex: 70%; color: rgb(115, 115, 115)">教师姓名</span>
+      </div>
+      <div class="divider-demo">
+        <span style="flex: 30%">批改日期</span>
+        <a-divider direction="vertical" />
+        <span style="flex: 70%; color: rgb(115, 115, 115)">xxxx-xx-xx</span>
+      </div>
     </a-space>
     <br />
-    <br />
   </div>
-  <a-space class="space">
-    <a-affix :offset-bottom="120" class="position">
-      <a-button type="primary" size="small">上一篇</a-button>
-    </a-affix>
-    <a-affix :offset-bottom="120" class="position">
-      <a-button type="primary" size="small">提交</a-button>
-    </a-affix>
-    <a-affix :offset-bottom="120" class="position">
-      <a-button type="primary" size="small">下一篇</a-button>
-    </a-affix>
-  </a-space>
+  <a-form :model="form" :style="{ width: '100%' }" @submit="handleSubmit">
+    <a-card style="margin-left: 5px; margin-right: 5px" title="论文评分">
+      <a-form-item
+        field="title"
+        :rules="[{ required: true, message: '选题评分不能为空' }]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-input-number v-model="form.title" placeholder="论文选题" />
+      </a-form-item>
+      <a-form-item
+        field="document"
+        :rules="[{ required: true, message: '文献综述不能为空' }]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-input-number v-model="form.document" placeholder="文献综述" />
+      </a-form-item>
+      <a-form-item
+        field="achievement"
+        :rules="[{ required: true, message: '研究成果不能为空' }]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-input-number v-model="form.achievement" placeholder="研究成果" />
+      </a-form-item>
+      <a-form-item
+        field="level"
+        :rules="[{ required: true, message: '科研水平不能为空' }]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-input-number v-model="form.level" placeholder="科研水平" />
+      </a-form-item>
+      <a-form-item
+        field="style"
+        :rules="[{ required: true, message: '学风和写作不能为空' }]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-input-number v-model="form.style" placeholder="学风和写作" />
+      </a-form-item>
+    </a-card>
+    <a-card
+      class="general-card"
+      :bordered="false"
+      style="
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+      "
+    >
+      <template #title>
+        <a-button
+          type="text"
+          style="font-size: large"
+          @click="handleClickSummary"
+        >
+          总体评阅意见
+        </a-button>
+        <a-drawer
+          :width="600"
+          :visible="visibleSummary"
+          placement="left"
+          unmount-on-close
+          @ok="handleOkSummary"
+          @cancel="handleCancelSummary"
+        >
+          <template #title>总体评阅意见</template>
+          <div>
+            <a-form-item
+              field="sumary"
+              :label="'仅罗列要点'"
+              :rules="[
+                {
+                  required: true,
+                  message: '总体评阅意见不能为空',
+                },
+              ]"
+              :validate-trigger="['change', 'blur']"
+            >
+              <a-textarea
+                v-model="form.sumary"
+                :max-length="400"
+                show-word-limit
+                :placeholder="'请简单说明，最多不要超多400字。'"
+              />
+            </a-form-item>
+          </div>
+        </a-drawer>
+      </template>
+      <a-form-item
+        field="sumary"
+        :rules="[
+          {
+            required: true,
+            message: '总体评阅意见不能为空',
+          },
+        ]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-textarea
+          v-model="form.sumary"
+          :max-length="400"
+          show-word-limit
+          :placeholder="'请简单说明，最多不要超多400字。'"
+        />
+      </a-form-item>
+    </a-card>
+    <a-card
+      class="general-card"
+      :bordered="false"
+      style="
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+      "
+    >
+      <template #title>
+        <a-button
+          type="text"
+          style="font-size: large"
+          @click="handleClickCorrect"
+        >
+          修改意见
+        </a-button>
+        <a-drawer
+          :width="600"
+          :visible="visibleCorrect"
+          placement="left"
+          unmount-on-close
+          @ok="handleOkCorrect"
+          @cancel="handleCancelCorrect"
+        >
+          <template #title>修改意见</template>
+          <div>
+            <a-form-item
+              field="correct"
+              :label="'仅罗列要点'"
+              :rules="[
+                {
+                  required: true,
+                  message: '修改意见不能为空',
+                },
+              ]"
+              :validate-trigger="['change', 'blur']"
+            >
+              <a-textarea
+                v-model="form.correct"
+                :max-length="400"
+                show-word-limit
+                :placeholder="'请简单说明，最多不要超多400字。'"
+              />
+            </a-form-item>
+          </div>
+        </a-drawer>
+      </template>
+      <a-form-item
+        field="correct"
+        :rules="[
+          {
+            required: true,
+            message: '修改意见不能为空',
+          },
+        ]"
+        :validate-trigger="['change', 'blur']"
+      >
+        <a-textarea
+          v-model="form.correct"
+          :max-length="400"
+          show-word-limit
+          :placeholder="'请简单说明，最多不要超多400字。'"
+        />
+      </a-form-item>
+    </a-card>
+    <a-form-item no-style="false">
+      <a-button html-type="submit" type="primary" style="margin: 20px">
+        Submit
+      </a-button>
+    </a-form-item>
+  </a-form>
 </template>
 
 <script setup></script>
 
 <script>
-  import { ref } from 'vue';
+  import { ref, reactive } from 'vue';
 
   export default {
     setup() {
-      const visible = ref(false);
+      const visibleSummary = ref(false);
+      const visibleCorrect = ref(false);
 
-      const handleClick = () => {
-        visible.value = true;
+      const handleClickSummary = () => {
+        visibleSummary.value = true;
       };
-      const handleOk = () => {
-        visible.value = false;
+      const handleOkSummary = () => {
+        visibleSummary.value = false;
       };
-      const handleCancel = () => {
-        visible.value = false;
+      const handleCancelSummary = () => {
+        visibleSummary.value = false;
+      };
+      const handleClickCorrect = () => {
+        visibleCorrect.value = true;
+      };
+      const handleOkCorrect = () => {
+        visibleCorrect.value = false;
+      };
+      const handleCancelCorrect = () => {
+        visibleCorrect.value = false;
+      };
+
+      const form = reactive({
+        title: '',
+        document: '',
+        achievement: '',
+        level: '',
+        style: '',
+        sumary: '',
+        correct: '',
+        isRead: false,
+      });
+      const handleSubmit = (data) => {
+        // eslint-disable-next-line no-console
+        console.log(data);
       };
 
       return {
-        visible,
-        handleClick,
-        handleOk,
-        handleCancel,
+        visibleSummary,
+        visibleCorrect,
+        handleClickSummary,
+        handleClickCorrect,
+        handleOkSummary,
+        handleOkCorrect,
+        handleCancelSummary,
+        handleCancelCorrect,
+        form,
+        handleSubmit,
       };
     },
   };
 </script>
 
 <style scoped>
-  .space {
+  .divider-demo {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-  .position {
-    flex: 1;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 5px solid rgb(var(--gray-2));
   }
 </style>
