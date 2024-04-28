@@ -80,12 +80,12 @@
       value: userStore.accountId,
     },
     {
-      label: '手机号',
+      label: '联系电话',
       value: userStore.phone,
     },
     {
-      label: '注册时间',
-      value: userStore.registrationDate,
+      label: '联系邮箱',
+      value: userStore.email,
     },
   ] as DescData[];
   const fileList = ref<FileItem[]>([file]);
@@ -93,7 +93,6 @@
     fileList.value = [fileItem];
   };
   const customRequest = (options: RequestOption) => {
-    // docs: https://axios-http.com/docs/cancellation
     const controller = new AbortController();
 
     (async function requestWrap() {
@@ -116,9 +115,6 @@
       };
 
       try {
-        // https://github.com/axios/axios/issues/1630
-        // https://github.com/nuysoft/Mock/issues/127
-
         const res = await userUploadApi(formData, {
           controller,
           onUploadProgress,

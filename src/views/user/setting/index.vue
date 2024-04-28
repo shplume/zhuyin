@@ -9,10 +9,13 @@
     <a-row class="wrapper">
       <a-col :span="24">
         <a-tabs default-active-key="1" type="rounded">
-          <a-tab-pane key="1" :title="'基础信息'">
-            <BasicInformation />
+          <a-tab-pane key="1" :title="'学生信息'">
+            <StudentInformation />
           </a-tab-pane>
-          <a-tab-pane key="2" :title="'安全设置'">
+          <a-tab-pane key="2" :title="'教师信息'">
+            <TeacherInformation />
+          </a-tab-pane>
+          <a-tab-pane key="3" :title="'安全设置'">
             <SecuritySettings />
           </a-tab-pane>
         </a-tabs>
@@ -22,9 +25,10 @@
 </template>
 
 <script lang="ts" setup>
-  import UserPanel from './components/user-panel.vue';
-  import BasicInformation from './components/basic-information.vue';
-  import SecuritySettings from './components/security-settings.vue';
+  import UserPanel from '@/views/user/setting/components/user-panel.vue';
+  import StudentInformation from '@/views/user/setting/components/student-information.vue';
+  import TeacherInformation from '@/views/user/setting/components/teacher-information.vue';
+  import SecuritySettings from '@/views/user/setting/components/security-settings.vue';
 </script>
 
 <script lang="ts">
