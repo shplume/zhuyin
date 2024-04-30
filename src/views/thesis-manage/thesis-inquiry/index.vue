@@ -399,6 +399,7 @@
     if (val) {
       nextTick(() => {
         const el = document.getElementById('tableSetting') as HTMLElement;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const sortable = new Sortable(el, {
           onEnd(e: any) {
             const { oldIndex, newIndex } = e;
