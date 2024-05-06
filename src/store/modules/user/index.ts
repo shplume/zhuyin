@@ -39,7 +39,13 @@ const useUserStore = defineStore('user', {
   actions: {
     switchRoles() {
       return new Promise((resolve) => {
-        this.role = this.role === 'user' ? 'admin' : 'user';
+        if (this.role === 'admin') {
+          this.role = 'teacher';
+        } else if (this.role === 'teacher') {
+          this.role = 'student';
+        } else {
+          this.role = 'admin';
+        }
         resolve(this.role);
       });
     },

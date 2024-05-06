@@ -32,8 +32,8 @@
   // import ProfileItem from './components/profile-item.vue';
   import OperationLog from './components/operation-log.vue';
 
-  const { loading, setLoading } = useLoading(true);
-  const { loading: preLoading, setLoading: preSetLoading } = useLoading(true);
+  const { setLoading } = useLoading(true);
+  const { setLoading: preSetLoading } = useLoading(true);
   // const currentData = ref<ProfileBasicRes>({} as ProfileBasicRes);
   // const preData = ref<ProfileBasicRes>({} as ProfileBasicRes);
   const step = ref(1);
