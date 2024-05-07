@@ -12,16 +12,16 @@ const USER: AppRouteRecordRaw = {
     order: 2,
   },
   children: [
-    // {
-    //   path: 'info',
-    //   name: 'Info',
-    //   component: () => import('@/views/user/info/index.vue'),
-    //   meta: {
-    //     locale: 'menu.user.info',
-    //     requiresAuth: true,
-    //     roles: ['*'],
-    //   },
-    // },
+    {
+      path: 'info',
+      name: 'Info',
+      component: () => import('@/views/user/info/index.vue'),
+      meta: {
+        locale: '个人信息',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
     {
       path: 'setting',
       name: 'Setting',

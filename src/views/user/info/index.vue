@@ -1,43 +1,45 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.user', 'menu.user.info']" />
-    <UserInfoHeader />
-    <div class="content">
-      <div class="content-left">
-        <a-grid :cols="24" :col-gap="16" :row-gap="16">
-          <a-grid-item :span="24">
-            <MyProject />
-          </a-grid-item>
-          <a-grid-item :span="24">
-            <LatestActivity />
-          </a-grid-item>
-        </a-grid>
-      </div>
-      <div class="content-right">
-        <a-grid :cols="24" :row-gap="16">
-          <a-grid-item :span="24">
-            <MyTeam />
-          </a-grid-item>
-          <a-grid-item class="panel" :span="24">
-            <LatestNotification />
-          </a-grid-item>
-        </a-grid>
-      </div>
-    </div>
+    <Breadcrumb :items="['menu.user', 'menu.user.setting']" />
+    <a-row v-permission="['admin']" class="wrapper">
+      <a-col :span="24">
+        <a-tabs default-active-key="1" type="rounded">
+          <a-tab-pane key="1" :title="'管理员信息'">
+            <AdminInformation />
+          </a-tab-pane>
+        </a-tabs>
+      </a-col>
+    </a-row>
+    <a-row v-permission="['teacher']" class="wrapper">
+      <a-col :span="24">
+        <a-tabs default-active-key="1" type="rounded">
+          <a-tab-pane key="1" :title="'教师信息'">
+            <TeacherInformation />
+          </a-tab-pane>
+        </a-tabs>
+      </a-col>
+    </a-row>
+    <a-row v-permission="['student']" class="wrapper">
+      <a-col :span="24">
+        <a-tabs default-active-key="1" type="rounded">
+          <a-tab-pane key="1" :title="'学生信息'">
+            <StudentInformation />
+          </a-tab-pane>
+        </a-tabs>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import UserInfoHeader from './components/user-info-header.vue';
-  import LatestNotification from './components/latest-notification.vue';
-  import MyProject from './components/my-project.vue';
-  import LatestActivity from './components/latest-activity.vue';
-  import MyTeam from './components/my-team.vue';
+  import StudentInformation from '@/views/user/info/components/student-information.vue';
+  import TeacherInformation from '@/views/user/info/components/teacher-information.vue';
+  import AdminInformation from '@/views/user/info/components/admin-information.vue';
 </script>
 
 <script lang="ts">
   export default {
-    name: 'Info',
+    name: 'Setting',
   };
 </script>
 
@@ -46,42 +48,16 @@
     padding: 0 20px 20px 20px;
   }
 
-  .content {
-    display: flex;
-    margin-top: 12px;
-
-    &-left {
-      flex: 1;
-      margin-right: 16px;
-      overflow: hidden;
-      // background-color: var(--color-bg-2);
-
-      :deep(.arco-tabs-nav-tab) {
-        margin-left: 16px;
-      }
-    }
-
-    &-right {
-      width: 332px;
-    }
-
-    .tab-pane-wrapper {
-      padding: 0 16px 16px 16px;
-    }
+  .wrapper {
+    padding: 20px 0 0 20px;
+    min-height: 580px;
+    background-color: var(--color-bg-2);
+    border-radius: 4px;
   }
-</style>
 
-<style lang="less" scoped>
-  .mobile {
-    .content {
-      display: block;
-      &-left {
-        margin-right: 0;
-        margin-bottom: 16px;
-      }
-      &-right {
-        width: 100%;
-      }
-    }
+  :deep(.section-title) {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 14px;
   }
 </style>
