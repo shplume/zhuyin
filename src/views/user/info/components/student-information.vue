@@ -30,7 +30,18 @@
     >
       <a-input v-model="formData.number" />
     </a-form-item>
-
+    <a-form-item
+      field="phone"
+      :label="'电话'"
+      :rules="[
+        {
+          required: true,
+          message: '电话是必填项',
+        },
+      ]"
+    >
+      <a-input v-model="formData.phone" />
+    </a-form-item>
     <a-form-item
       field="department"
       :label="'院系'"
@@ -94,6 +105,7 @@
     department: '',
     major: '',
     class: '',
+    phone: '',
   });
   const validate = async () => {
     const res = await formRef.value?.validate();
