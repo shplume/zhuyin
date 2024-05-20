@@ -10,7 +10,6 @@ const THESISMANAGE: AppRouteRecordRaw = {
     icon: 'icon-archive',
     requiresAuth: true,
     order: 1,
-    roles: ['admin', 'teacher'],
   },
   children: [
     {
@@ -38,7 +37,7 @@ const THESISMANAGE: AppRouteRecordRaw = {
       name: 'thesisView',
       component: () => import('@/views/thesis-manage/thesis-view/index.vue'),
       meta: {
-        locale: '评阅界面',
+        locale: 'menu.thesisManage.view',
         requiresAuth: true,
         roles: ['*'],
       },

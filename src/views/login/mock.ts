@@ -47,7 +47,7 @@ setupMock({
       return failResponseWrap(null, '注册账户失败', 500);
     });
 
-    Mock.mock(new RegExp('/api/user/logout'), () => {
+    Mock.mock(new RegExp('/api/v1/user/logout'), () => {
       return successResponseWrap(null);
     });
 

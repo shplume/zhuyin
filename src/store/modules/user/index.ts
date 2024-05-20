@@ -12,22 +12,10 @@ import useAppStore from '../app';
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    name: undefined,
+    userId: undefined,
+    account: undefined,
     avatar: undefined,
-    job: undefined,
-    organization: undefined,
-    location: undefined,
-    email: undefined,
-    introduction: undefined,
-    personalWebsite: undefined,
-    jobName: undefined,
-    organizationName: undefined,
-    locationName: undefined,
-    phone: undefined,
-    registrationDate: undefined,
-    accountId: undefined,
-    certification: undefined,
-    role: '',
+    role: undefined,
   }),
 
   getters: {
@@ -39,16 +27,15 @@ const useUserStore = defineStore('user', {
   actions: {
     switchRoles() {
       return new Promise((resolve) => {
-        if (this.role === 'admin') {
-          this.role = 'teacher';
-        } else if (this.role === 'teacher') {
-          this.role = 'student';
+        if (this.role === undefined) {
+          this.role = 0;
         } else {
-          this.role = 'admin';
+          this.role += 1 % 3;
         }
         resolve(this.role);
       });
     },
+
     // Set user's information
     setInfo(partial: Partial<UserState>) {
       this.$patch(partial);
@@ -76,6 +63,7 @@ const useUserStore = defineStore('user', {
         throw err;
       }
     },
+
     logoutCallBack() {
       const appStore = useAppStore();
       this.resetInfo();

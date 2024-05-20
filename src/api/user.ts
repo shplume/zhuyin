@@ -10,6 +10,10 @@ export function login(data: LoginData) {
   return axios.post('/api/v1/user/login', data);
 }
 
+export function getUserInfo() {
+  return axios.post('/api/v1/user/info');
+}
+
 export interface RegisterData {
   account: string;
   password: string;
@@ -18,10 +22,6 @@ export interface RegisterData {
 
 export function userRegister(data: RegisterData) {
   return axios.post('/api/v1/user/register', data);
-}
-
-export function getUserInfo() {
-  return axios.post('/api/v1/user/info');
 }
 
 export function getMenuList() {
@@ -33,5 +33,5 @@ export interface LoginRes {
 }
 
 export function logout() {
-  return axios.post<LoginRes>('/api/user/logout');
+  return axios.post<LoginRes>('/api/v1/user/logout');
 }

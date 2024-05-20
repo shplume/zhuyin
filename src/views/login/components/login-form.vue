@@ -1,35 +1,13 @@
 <script setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { reactive } from 'vue';
   import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
   import { useStorage } from '@vueuse/core';
   import { useUserStore } from '@/store';
   import useLoading from '@/hooks/loading';
-  import ImageCaptcha from '@/utils/captcha-generator';
 
   const router = useRouter();
   const userStore = useUserStore();
-  const isRegister = ref(false);
-
-  const verifyImageSrc = ref('');
-  const verifyImageStr = ref('');
-
-  const getVerifyImageInfo = async () => {
-    const captcha = new ImageCaptcha({
-      height: 30,
-    });
-    const imageUrl = await captcha.getCaptchaImageUrl();
-    verifyImageSrc.value = imageUrl;
-    verifyImageStr.value = captcha.captchaText;
-  };
-
-  onMounted(async () => {
-    try {
-      await getVerifyImageInfo();
-    } catch (error) {
-      //
-    }
-  });
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
@@ -40,14 +18,6 @@
   const userAndRegisterInfo = reactive({
     account: loginConfig.value.account,
     password: loginConfig.value.password,
-    identity: '',
-    confirmPassword: '',
-    email: '',
-    verify: '',
-  });
-
-  const userAgreement = reactive({
-    selected: false,
   });
 
   const { loading, setLoading } = useLoading();
@@ -55,63 +25,30 @@
     if (loading.value) return;
 
     if (!errors) {
-      if (!isRegister.value) {
-        setLoading(true);
-        try {
-          await userStore.login({
-            account: values.account,
-            password: values.password,
-            identity: values.identity,
-          });
-          const { redirect, ...othersQuery } = router.currentRoute.value.query;
-          router.push({
-            name: redirect || 'myThesis',
-            query: {
-              ...othersQuery,
-            },
-          });
-          Message.success('欢迎使用');
-          const { rememberPassword } = loginConfig.value;
-          const { account, password } = values;
-          // 实际生产环境需要进行加密存储。
-          // The actual production environment requires encrypted storage.
-          loginConfig.value.account = rememberPassword ? account : '';
-          loginConfig.value.password = rememberPassword ? password : '';
-        } catch (err) {
-          Message.error(err.message);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(true);
-        try {
-          if (userAndRegisterInfo.verify !== verifyImageStr.value) {
-            Message.warning('验证码填写错误');
-            await getVerifyImageInfo();
-            return;
-          }
-          if (!userAgreement.selected) {
-            Message.warning('请阅读用户协议');
-            return;
-          }
-          await userStore.register({
-            account: values.account,
-            password: values.password,
-            email: values.email,
-          });
-          Message.success('注册成功');
-          isRegister.value = false;
-          userAgreement.selected = false;
-          userAndRegisterInfo.password = '';
-          userAndRegisterInfo.confirmPassword = '';
-          userAndRegisterInfo.identity = '';
-          userAndRegisterInfo.email = '';
-          userAndRegisterInfo.verify = '';
-        } catch (err) {
-          Message.error(err.message);
-        } finally {
-          setLoading(false);
-        }
+      setLoading(true);
+      try {
+        await userStore.login({
+          account: values.account,
+          password: values.password,
+        });
+        const { redirect, ...othersQuery } = router.currentRoute.value.query;
+        router.push({
+          name: redirect || 'myThesis',
+          query: {
+            ...othersQuery,
+          },
+        });
+        Message.success('欢迎使用');
+        const { rememberPassword } = loginConfig.value;
+        const { account, password } = values;
+        // 实际生产环境需要进行加密存储。
+        // The actual production environment requires encrypted storage.
+        loginConfig.value.account = rememberPassword ? account : '';
+        loginConfig.value.password = rememberPassword ? password : '';
+      } catch (err) {
+        Message.error(err.message);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -131,81 +68,62 @@
         layout="vertical"
         @submit="handleSubmit"
       >
-        <TransitionGroup name="list" tag="div">
-          <a-form-item
-            field="account"
-            :rules="[{ required: true, message: '用户名不能为空' }]"
-            :validate-trigger="['change', 'blur']"
-            hide-label
+        <a-form-item
+          field="account"
+          :rules="[{ required: true, message: '用户名不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input
+            v-model="userAndRegisterInfo.account"
+            :placeholder="'用户名'"
           >
-            <a-input
-              v-model="userAndRegisterInfo.account"
-              :placeholder="'用户名'"
-            >
-              <template #prefix>
-                <icon-user />
-              </template>
-            </a-input>
-          </a-form-item>
+            <template #prefix>
+              <icon-user />
+            </template>
+          </a-input>
+        </a-form-item>
 
-          <a-form-item
-            field="password"
-            :rules="[{ required: true, message: '密码不能为空' }]"
-            :validate-trigger="['change', 'blur']"
-            hide-label
+        <a-form-item
+          field="password"
+          :rules="[{ required: true, message: '密码不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input-password
+            v-model="userAndRegisterInfo.password"
+            :placeholder="'密码'"
+            allow-clear
           >
-            <a-input-password
-              v-model="userAndRegisterInfo.password"
-              :placeholder="'密码'"
-              allow-clear
-            >
-              <template #prefix>
-                <icon-lock />
-              </template>
-            </a-input-password>
-          </a-form-item>
-        </TransitionGroup>
+            <template #prefix>
+              <icon-lock />
+            </template>
+          </a-input-password>
+        </a-form-item>
 
-        <a-space :size="16" direction="vertical">
-          <div v-if="!isRegister" class="login-form-password-actions">
-            <a-checkbox
-              checked="rememberPassword"
-              :model-value="loginConfig.rememberPassword"
-              @change="
-                (value) => {
-                  loginConfig.rememberPassword = value;
-                }
-              "
-            >
-              {{ '记住密码' }}
-            </a-checkbox>
-            <a-link class="font">{{ '忘记密码' }}</a-link>
-          </div>
-          <a-button type="primary" html-type="submit" long>登录</a-button>
-        </a-space>
-        <div class="br"></div>
+        <div class="login-form-password-actions">
+          <a-checkbox
+            checked="rememberPassword"
+            :model-value="loginConfig.rememberPassword"
+          >
+            {{ '记住密码' }}
+          </a-checkbox>
+          <a-link class="font">{{ '忘记密码' }}</a-link>
+        </div>
+
+        <div style="margin-bottom: 12px"></div>
+
+        <a-button type="primary" html-type="submit" :loading="loading">
+          登录
+        </a-button>
+
+        <div style="margin-bottom: 20px"></div>
       </a-form>
     </div>
   </div>
 </template>
 
-<style lang="less">
-  .list-enter-active,
-  .list-leave-active {
-    transition: all 0.5s ease;
-  }
-  .list-enter-from,
-  .list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-</style>
-
 <style lang="less" scoped>
-  .br {
-    margin-bottom: 20px;
-  }
-
   .box {
     width: 400px;
     height: 400%;

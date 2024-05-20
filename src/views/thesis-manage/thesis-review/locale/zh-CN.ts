@@ -1,5 +1,6 @@
 export default {
   'menu.thesisManage.review': '论文评阅',
+
   'cardList.tab.title.all': '全部',
   'cardList.tab.title.content': '内容质检',
   'cardList.tab.title.service': '开通服务',

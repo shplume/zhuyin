@@ -10,7 +10,6 @@ const MYTHESIS: AppRouteRecordRaw = {
     icon: 'icon-bookmark',
     requiresAuth: true,
     order: 0,
-    roles: ['admin', 'student'],
   },
   children: [
     {
