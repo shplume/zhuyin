@@ -12,8 +12,6 @@ setupMock({
   setup() {
     // login
     Mock.mock(new RegExp('/api/v1/user/login'), (params: MockParams) => {
-      window.console.log(params.body);
-
       const { account, password } = JSON.parse(params.body);
       if (!account) {
         return failResponseWrap(null, '用户名不能为空', 500);
@@ -27,6 +25,16 @@ setupMock({
         });
       }
       return failResponseWrap(null, '账号或者密码错误', 500);
+    });
+
+    // user info
+    Mock.mock(new RegExp('/api/v1/user/info'), () => {
+      return successResponseWrap({
+        userId: 1,
+        account: 'admin',
+        avatar: '',
+        role: 0,
+      });
     });
 
     // register
@@ -49,15 +57,6 @@ setupMock({
 
     Mock.mock(new RegExp('/api/v1/user/logout'), () => {
       return successResponseWrap(null);
-    });
-
-    // user info
-    Mock.mock(new RegExp('/api/v1/user/info'), () => {
-      return successResponseWrap({
-        userId: 0,
-        account: 'admin',
-        role: 'admin',
-      });
     });
   },
 });
