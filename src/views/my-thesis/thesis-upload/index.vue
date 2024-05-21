@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['论文上传', '上传']" />
+    <Breadcrumb :items="['menu.myThesis', 'menu.myThesis.upload']" />
     <a-spin :loading="loading" style="width: 100%">
       <a-card class="general-card">
         <template #title> 论文上传 </template>
@@ -17,7 +17,11 @@
           </a-steps>
           <keep-alive>
             <BaseInfo v-if="step === 1" @change-step="changeStep" />
-            <ChannelInfo v-else-if="step === 2" @change-step="changeStep" />
+            <ChannelInfo
+              v-else-if="step === 2"
+              :upload-thesis-func="customRequest"
+              @change-step="changeStep"
+            />
             <Success v-else-if="step === 3" @change-step="changeStep" />
           </keep-alive>
         </div>
@@ -28,60 +32,93 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import useLoading from '@/hooks/loading';
+  import { Message, RequestOption } from '@arco-design/web-vue';
   import {
-    submitChannelForm,
-    BaseInfoModel,
-    ChannelInfoModel,
-    UnitChannelModel,
-  } from '@/api/form';
+    queryCreateThesis,
+    CreateThesisParameter,
+    queryUploadThesis,
+  } from '@/api/thesis';
+  import useLoading from '@/hooks/loading';
   import BaseInfo from './components/base-info.vue';
   import ChannelInfo from './components/channel-info.vue';
   import Success from './components/success.vue';
 
   const { loading, setLoading } = useLoading(false);
   const step = ref(1);
-  const submitModel = ref<UnitChannelModel>({} as UnitChannelModel);
-  const submitForm = async () => {
+  const thesisId = ref('');
+
+  const createThesis = async (data: CreateThesisParameter) => {
     setLoading(true);
     try {
-      await submitChannelForm(submitModel.value); // The mock api default success
-      step.value = 3;
-      submitModel.value = {} as UnitChannelModel; // init
+      const res = await queryCreateThesis(data);
+      thesisId.value = `${res.data.thesisId}`;
+      Message.success('创建成功');
+      step.value = 2;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
+
+  const customRequest = (options: RequestOption) => {
+    const controller = new AbortController();
+
+    (async function requestWrap() {
+      const { onProgress, onError, onSuccess, fileItem } = options;
+      onProgress(20);
+
+      const formData = new FormData();
+      formData.append('file', fileItem.file as Blob);
+      formData.append('thesisId', thesisId.value);
+
+      const onUploadProgress = (event: ProgressEvent) => {
+        let percent;
+        if (event.total > 0) {
+          percent = (event.loaded / event.total) * 100;
+        }
+        onProgress(parseInt(String(percent), 10), event);
+      };
+
+      try {
+        const res = await queryUploadThesis(formData, {
+          controller,
+          onUploadProgress,
+        });
+        onSuccess(res);
+      } catch (error) {
+        onError(error);
+      }
+    })();
+    return {
+      abort() {
+        controller.abort();
+      },
+    };
+  };
+
   const changeStep = (
     direction: string | number,
-    model: BaseInfoModel | ChannelInfoModel
+    model: CreateThesisParameter | File
   ) => {
     if (typeof direction === 'number') {
       step.value = direction;
       return;
     }
 
-    if (direction === 'forward' || direction === 'submit') {
-      submitModel.value = {
-        ...submitModel.value,
-        ...model,
-      };
-      if (direction === 'submit') {
-        submitForm();
-        return;
-      }
+    if (direction === 'forward-create') {
+      createThesis(model as CreateThesisParameter);
+      return;
+    }
+
+    if (direction === 'forward') {
       step.value += 1;
-    } else if (direction === 'backward') {
+      return;
+    }
+
+    if (direction === 'backward') {
       step.value -= 1;
     }
-  };
-</script>
-
-<script lang="ts">
-  export default {
-    name: 'Step',
   };
 </script>
 

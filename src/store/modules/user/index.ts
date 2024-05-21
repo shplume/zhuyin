@@ -16,6 +16,10 @@ const useUserStore = defineStore('user', {
     account: undefined,
     avatar: undefined,
     role: undefined,
+    name: undefined,
+    college: undefined,
+    phone: undefined,
+    number: undefined,
   }),
 
   getters: {
@@ -25,34 +29,6 @@ const useUserStore = defineStore('user', {
   },
 
   actions: {
-    switchRoles() {
-      return new Promise((resolve) => {
-        if (this.role === undefined) {
-          this.role = 0;
-        } else {
-          this.role += 1 % 3;
-        }
-        resolve(this.role);
-      });
-    },
-
-    // Set user's information
-    setInfo(partial: Partial<UserState>) {
-      this.$patch(partial);
-    },
-
-    // Reset user's information
-    resetInfo() {
-      this.$reset();
-    },
-
-    // Get user's information
-    async info() {
-      const res = await getUserInfo();
-
-      this.setInfo(res.data);
-    },
-
     // Login
     async login(loginForm: LoginData) {
       try {
@@ -62,6 +38,34 @@ const useUserStore = defineStore('user', {
         clearToken();
         throw err;
       }
+    },
+
+    // Info - Set user's information
+    setInfo(partial: Partial<UserState>) {
+      this.$patch(partial);
+    },
+
+    // Info - Get user's information
+    async info() {
+      const res = await getUserInfo();
+
+      this.setInfo(res.data);
+    },
+
+    // Info - Reset user's information
+    resetInfo() {
+      this.$reset();
+    },
+
+    switchRoles() {
+      return new Promise((resolve) => {
+        if (this.role === undefined) {
+          this.role = 0;
+        } else {
+          this.role += 1 % 3;
+        }
+        resolve(this.role);
+      });
     },
 
     logoutCallBack() {

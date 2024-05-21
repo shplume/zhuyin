@@ -143,9 +143,7 @@
       />
     </a-form-item>
     <a-form-item>
-      <a-button type="primary" @click="onNextClick">
-        {{ $t('stepForm.button.next') }}
-      </a-button>
+      <a-button type="primary" @click="onNextClick"> 下一步 </a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -153,11 +151,11 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { FormInstance } from '@arco-design/web-vue/es/form';
-  import { BaseInfoModel } from '@/api/form';
+  import { CreateThesisParameter } from '@/api/thesis';
 
   const emits = defineEmits(['changeStep']);
   const formRef = ref<FormInstance>();
-  const formData = ref<BaseInfoModel>({
+  const formData = ref<CreateThesisParameter>({
     chineseTitle: '',
     englishTitle: '',
     authors: [],
@@ -171,7 +169,7 @@
   const onNextClick = async () => {
     const res = await formRef.value?.validate();
     if (!res) {
-      emits('changeStep', 'forward', { ...formData.value });
+      emits('changeStep', 'forward-create', { ...formData.value });
     }
   };
 </script>
