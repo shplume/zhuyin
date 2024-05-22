@@ -6,12 +6,15 @@
       :custom-request="props.uploadThesisFunc"
       :limit="1"
       draggable
-      @success="successCallback"
+      @success="successCallBack"
+      @error="errorCallBack"
     >
     </a-upload>
     <a-space class="container-space" size="large">
       <a-button type="secondary" @click="goPrev"> 返回上一步 </a-button>
-      <a-button type="primary" @click="onNextClick"> 提交论文 </a-button>
+      <a-button type="primary" :loading="loading" @click="onNextClick">
+        提交论文
+      </a-button>
     </a-space>
   </div>
 </template>
@@ -19,10 +22,14 @@
 <script lang="ts" setup>
   import { ref, PropType } from 'vue';
   import { Message, RequestOption, UploadRequest } from '@arco-design/web-vue';
+  import useLoading from '@/hooks/loading';
+
+  const { loading, setLoading } = useLoading(false);
 
   const uploadRef = ref();
   const onNextClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
+    setLoading(true);
     uploadRef.value.submit();
   };
 
@@ -44,9 +51,14 @@
     },
   });
 
-  const successCallback = () => {
+  const successCallBack = () => {
     Message.success('论文上传成功');
     emits('changeStep', 'forward');
+    setLoading(false);
+  };
+
+  const errorCallBack = () => {
+    setLoading(false);
   };
 </script>
 

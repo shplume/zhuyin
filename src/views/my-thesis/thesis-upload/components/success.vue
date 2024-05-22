@@ -3,7 +3,7 @@
     <a-result status="success" title="上传成功" subtitle="论文上传成功" />
     <a-space :size="16">
       <a-button key="again" type="secondary" @click="oneMore">
-        再次上传
+        论文状态
       </a-button>
     </a-space>
     <div class="details-wrapper">
@@ -11,16 +11,18 @@
         补充说明
       </a-typography-title>
       <a-typography-paragraph style="margin-bottom: 0">
-        论文上传成功，请注意批阅日期，及时了解论文审批情况
+        论文上传成功，请关注论文状态，及时了解论文审批情况
       </a-typography-paragraph>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  const emits = defineEmits(['changeStep']);
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
   const oneMore = () => {
-    emits('changeStep', 1);
+    router.push({ name: 'thesisState' });
   };
 </script>
 

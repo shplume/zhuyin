@@ -22,7 +22,7 @@
               :upload-thesis-func="customRequest"
               @change-step="changeStep"
             />
-            <Success v-else-if="step === 3" @change-step="changeStep" />
+            <Success v-else-if="step === 3" />
           </keep-alive>
         </div>
       </a-card>
@@ -101,11 +101,6 @@
     direction: string | number,
     model: CreateThesisParameter | File
   ) => {
-    if (typeof direction === 'number') {
-      step.value = direction;
-      return;
-    }
-
     if (direction === 'forward-create') {
       createThesis(model as CreateThesisParameter);
       return;
