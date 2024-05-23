@@ -28,3 +28,7 @@ export function queryUploadThesis(
 ) {
   return axios.post('/api/v1/thesis/upload', data, config);
 }
+
+export function queryReviewRecord() {
+  return axios.post('/api/v1/thesis/reviewRecord');
+}

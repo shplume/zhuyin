@@ -2,7 +2,7 @@
   <div class="container">
     <Breadcrumb :items="['menu.myThesis', 'menu.myThesis.state']" />
     <a-space direction="vertical" :size="16" fill>
-      <a-card class="general-card" :title="'论文评审流程'">
+      <a-card class="general-card" :title="'论文评审流程'" :loading="loading">
         <template #extra>
           <a-space>
             <a-button type="primary">{{ '取消评审流程' }}</a-button>
@@ -14,52 +14,38 @@
           <a-step>{{ '评阅完成' }}</a-step>
         </a-steps>
       </a-card>
-      <!-- <a-card class="general-card">
-        <ProfileItem :loading="loading" :render-data="currentData" />
-      </a-card>
-      <a-card class="general-card">
-        <ProfileItem :loading="preLoading" type="pre" :render-data="preData" />
-      </a-card> -->
-      <OperationLog />
+      <OperationLog :render-data="renderData" />
     </a-space>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { queryReviewRecord } from '@/api/thesis';
   import useLoading from '@/hooks/loading';
-  // import { queryProfileBasic, ProfileBasicRes } from '@/api/profile';
-  // import ProfileItem from './components/profile-item.vue';
+  import dayjs from 'dayjs';
   import OperationLog from './components/operation-log.vue';
 
-  const { setLoading } = useLoading(true);
-  const { setLoading: preSetLoading } = useLoading(true);
-  // const currentData = ref<ProfileBasicRes>({} as ProfileBasicRes);
-  // const preData = ref<ProfileBasicRes>({} as ProfileBasicRes);
-  const step = ref(1);
-  const fetchCurrentData = async () => {
+  const renderData = ref([]);
+  const step = ref(0);
+
+  const { loading, setLoading } = useLoading(true);
+  const fetchData = async () => {
     try {
-      // const { data } = await queryProfileBasic();
-      // currentData.value = data;
-      step.value = 2;
+      const { data } = await queryReviewRecord();
+      renderData.value = data.data.sort(
+        (a: any, b: any) =>
+          dayjs(b.time as string).valueOf() - dayjs(a.time as string).valueOf()
+      );
+
+      window.console.log(renderData.value);
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  const fetchPreData = async () => {
-    try {
-      // const { data } = await queryProfileBasic();
-      // preData.value = data;
-    } catch (err) {
-      // you can report use errorHandler or other
-    } finally {
-      preSetLoading(false);
-    }
-  };
-  fetchCurrentData();
-  fetchPreData();
+  fetchData();
 </script>
 
 <script lang="ts">
