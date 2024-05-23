@@ -124,17 +124,6 @@
 </template>
 
 <style lang="less" scoped>
-  .box {
-    width: 400px;
-    height: 400%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 15px #05050547;
-    border-radius: 20px 20px 20px 20px;
-  }
-
   .font {
     color: rgba(0, 0, 0, 0.648);
   }
