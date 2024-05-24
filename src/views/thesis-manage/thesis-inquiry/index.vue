@@ -12,50 +12,49 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item field="name" :label="'论文题目'">
+                <a-form-item field="title" :label="'论文题目'">
                   <a-input
-                    v-model="formModel.name"
+                    v-model="formModel.title"
                     :placeholder="'请输入论文题目或论文英文题目'"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="number" :label="'姓名/学号'">
+                <a-form-item field="name" :label="'姓名'">
                   <a-input
-                    v-model="formModel.number"
-                    :placeholder="'请输入学生姓名或学号'"
+                    v-model="formModel.name"
+                    :placeholder="'请输入学生姓名'"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="specialty" :label="'专业'">
+                <a-form-item field="number" :label="'学号'">
                   <a-input
-                    v-model="formModel.specialty"
+                    v-model="formModel.number"
+                    :placeholder="'请输入学生学号'"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item field="college" :label="'专业'">
+                  <a-input
+                    v-model="formModel.college"
                     :placeholder="'请输入学生所在专业'"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="nature" :label="'送审性质'">
-                  <a-select
-                    v-model="formModel.nature"
-                    :options="natureOptions"
-                    :placeholder="'请选择送审性质'"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="createdTime" :label="'上传日期'">
+                <a-form-item field="uploadTime" :label="'上传日期'">
                   <a-range-picker
-                    v-model="formModel.createdTime"
+                    v-model="formModel.uploadTime"
                     style="width: 100%"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="status" :label="'状态'">
+                <a-form-item field="fileState" :label="'状态'">
                   <a-select
-                    v-model="formModel.status"
+                    v-model="formModel.fileState"
                     :options="statusOptions"
                     :placeholder="'全部'"
                   />
@@ -64,7 +63,9 @@
             </a-row>
           </a-form>
         </a-col>
+
         <a-divider style="height: 84px" direction="vertical" />
+
         <a-col :flex="'86px'" style="text-align: right">
           <a-space direction="vertical" :size="18">
             <a-button type="primary" @click="search">
@@ -82,14 +83,16 @@
           </a-space>
         </a-col>
       </a-row>
+
       <a-divider style="margin-top: 0" />
+
       <a-row style="margin-bottom: 16px">
         <a-col :span="12"> </a-col>
         <a-col
           :span="12"
           style="display: flex; align-items: center; justify-content: end"
         >
-          <a-dropdown-button type="primary" @click="handleClick">
+          <a-dropdown-button type="primary" @click="() => {}">
             <icon-send style="margin-right: 8px" />
             送审
             <template #content>
@@ -101,9 +104,9 @@
           </a-dropdown-button>
 
           <a-tooltip :content="'刷新'">
-            <div class="action-icon" @click="search"
-              ><icon-refresh size="18"
-            /></div>
+            <div class="action-icon" @click="fetchData">
+              <icon-refresh size="18" :spin="loading" />
+            </div>
           </a-tooltip>
           <a-dropdown @select="handleSelectDensity">
             <a-tooltip :content="'密度'">
@@ -156,6 +159,7 @@
           </a-tooltip>
         </a-col>
       </a-row>
+
       <a-table
         row-key="id"
         :loading="loading"
@@ -165,7 +169,11 @@
         :data="renderData"
         :bordered="false"
         :size="size"
-        @page-change="onPageChange"
+        @page-change="
+          (e) => {
+            pagination.current = e;
+          }
+        "
         @select="
           (rowKeys, _, record) => {
             selectIds = rowKeys;
@@ -173,9 +181,52 @@
           }
         "
       >
+        <template #columns>
+          <a-table-column :title="'学号'" data-index="number">
+            <template #cell="{ record }">
+              {{ record.number }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'姓名'" data-index="name">
+            <template #cell="{ record }">
+              {{ record.name }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'院系'" data-index="college">
+            <template #cell="{ record }">
+              {{ record.college }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'论文题目'" data-index="chineseTitle">
+            <template #cell="{ record }">
+              {{ record.chineseTitle }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'论文英文题目'" data-index="englishTitle">
+            <template #cell="{ record }">
+              {{ record.englishTitle }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'上传日期'" data-index="uploadTime">
+            <template #cell="{ record }">
+              {{ dayjs(record.time).format('YYYY-MM-DD HH:mm') }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'状态'" data-index="fileState">
+            <template #cell="{ record }">
+              {{ record.fileState }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="'操作'" data-index="status">
+            <template #cell="{ record }">
+              {{ record.status }}
+            </template>
+          </a-table-column>
+        </template>
       </a-table>
     </a-card>
-    <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
+
+    <!-- <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
       <template #title> 请选择当前需要评阅的老师 </template>
       <a-space size="large">
         <a-avatar>A</a-avatar>
@@ -191,60 +242,58 @@
           />
         </a-avatar>
       </a-space>
-    </a-modal>
+    </a-modal> -->
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, reactive, watch, nextTick } from 'vue';
-  // import { useI18n } from 'vue-i18n';
-  import useLoading from '@/hooks/loading';
-  import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/list';
+  import { ref, computed, nextTick, reactive, watch } from 'vue';
   import { Pagination } from '@/types/global';
+  import { queryAllotList, AllotListRelevant } from '@/api/list';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
   import type {
     TableColumnData,
     TableRowSelection,
   } from '@arco-design/web-vue/es/table/interface';
+  import useLoading from '@/hooks/loading';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
+  import dayjs from 'dayjs';
+  import isBetween from 'dayjs/plugin/isBetween';
 
-  type SizeProps = 'mini' | 'small' | 'medium' | 'large';
-  type Column = TableColumnData & { checked?: true };
-
-  const rowSelection = reactive<TableRowSelection>({
-    type: 'checkbox',
-    showCheckedAll: true,
-    onlyCurrent: false,
-  });
+  dayjs.extend(isBetween);
 
   const generateFormModel = () => {
     return {
-      number: '',
+      title: '',
       name: '',
-      specialty: '',
-      nature: '',
-      createdTime: [],
-      status: '',
+      number: '',
+      college: '',
+      uploadTime: [],
+      fileState: undefined,
     };
   };
-  const { loading, setLoading } = useLoading(true);
-  // const { t } = useI18n();
-  const renderData = ref<PolicyRecord[]>([]);
   const formModel = ref(generateFormModel());
-  const cloneColumns = ref<Column[]>([]);
-  const showColumns = ref<Column[]>([]);
-  const selectIds = ref<(string | number)[]>([]);
 
+  const statusOptions = computed<SelectOptionData[]>(() => [
+    {
+      label: '1',
+      value: 1,
+    },
+    {
+      label: '2',
+      value: 2,
+    },
+  ]);
+
+  type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   const size = ref<SizeProps>('medium');
-
-  const basePagination: Pagination = {
-    current: 1,
-    pageSize: 20,
+  const handleSelectDensity = (
+    val: string | number | Record<string, any> | undefined
+  ) => {
+    size.value = val as SizeProps;
   };
-  const pagination = reactive({
-    ...basePagination,
-  });
+
   const densityList = computed(() => [
     {
       name: '迷你',
@@ -263,119 +312,6 @@
       value: 'large',
     },
   ]);
-  const columns = computed<TableColumnData[]>(() => [
-    {
-      title: '学号',
-      dataIndex: 'studentNumber',
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-    },
-    {
-      title: '专业',
-      dataIndex: 'specialty',
-    },
-    {
-      title: '送审性质',
-      dataIndex: 'nature',
-    },
-    {
-      title: '论文题目',
-      dataIndex: 'thesisTitle',
-    },
-    {
-      title: '论文英文题目',
-      dataIndex: 'englishThesisTitle',
-    },
-    {
-      title: '上传日期',
-      dataIndex: 'createdTime',
-    },
-    {
-      title: '评阅书模板类型',
-      dataIndex: 'softtype',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-    },
-    {
-      title: '操作',
-      dataIndex: 'status',
-    },
-  ]);
-
-  const natureOptions = computed<SelectOptionData[]>(() => [
-    {
-      label: '首次送审',
-      value: 'artificial',
-    },
-    {
-      label: '导师审核',
-      value: 'rules',
-    },
-  ]);
-  const statusOptions = computed<SelectOptionData[]>(() => [
-    {
-      label: '0',
-      value: 'online',
-    },
-    {
-      label: '1',
-      value: 'offline',
-    },
-  ]);
-  const fetchData = async (
-    params: PolicyParams = { current: 1, pageSize: 20 }
-  ) => {
-    setLoading(true);
-    try {
-      const { data } = await queryPolicyList(params);
-      renderData.value = data.list;
-      pagination.current = params.current;
-      pagination.total = data.total;
-    } catch (err) {
-      // you can report use errorHandler or other
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const search = () => {
-    fetchData({
-      ...basePagination,
-      ...formModel.value,
-    } as unknown as PolicyParams);
-  };
-  const onPageChange = (current: number) => {
-    fetchData({ ...basePagination, current });
-  };
-
-  fetchData();
-  const reset = () => {
-    formModel.value = generateFormModel();
-  };
-
-  const handleSelectDensity = (
-    val: string | number | Record<string, any> | undefined
-  ) => {
-    size.value = val as SizeProps;
-  };
-
-  const handleChange = (
-    checked: boolean | (string | boolean | number)[],
-    column: Column,
-    index: number
-  ) => {
-    if (!checked) {
-      cloneColumns.value = showColumns.value.filter(
-        (item) => item.dataIndex !== column.dataIndex
-      );
-    } else {
-      cloneColumns.value.splice(index, 0, column);
-    }
-  };
 
   const exchangeArray = <T extends Array<any>>(
     array: T,
@@ -395,6 +331,9 @@
     return newArray;
   };
 
+  type Column = TableColumnData & { checked?: true };
+  const cloneColumns = ref<Column[]>([]);
+  const showColumns = ref<Column[]>([]);
   const popupVisibleChange = (val: boolean) => {
     if (val) {
       nextTick(() => {
@@ -411,6 +350,110 @@
     }
   };
 
+  const handleChange = (
+    checked: boolean | (string | boolean | number)[],
+    column: Column,
+    index: number
+  ) => {
+    if (!checked) {
+      cloneColumns.value = showColumns.value.filter(
+        (item) => item.dataIndex !== column.dataIndex
+      );
+    } else {
+      cloneColumns.value.splice(index, 0, column);
+    }
+  };
+
+  const basePagination: Pagination = {
+    current: 1,
+    pageSize: 15,
+  };
+  const pagination = reactive({
+    ...basePagination,
+  });
+
+  const rowSelection = reactive<TableRowSelection>({
+    type: 'checkbox',
+    showCheckedAll: true,
+    onlyCurrent: false,
+  });
+
+  const columns = computed<TableColumnData[]>(() => [
+    {
+      title: '学号',
+      dataIndex: 'number',
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+    },
+    {
+      title: '院系',
+      dataIndex: 'college',
+    },
+    {
+      title: '论文题目',
+      dataIndex: 'chineseTitle',
+    },
+    {
+      title: '论文英文题目',
+      dataIndex: 'englishTitle',
+    },
+    {
+      title: '上传日期',
+      dataIndex: 'uploadTime',
+    },
+    {
+      title: '状态',
+      dataIndex: 'fileState',
+    },
+    {
+      title: '操作',
+      dataIndex: 'status',
+    },
+  ]);
+
+  const selectIds = ref<(string | number)[]>([]);
+  const renderData = ref<AllotListRelevant[]>([]);
+  const allotListData = ref<AllotListRelevant[]>([]);
+  const { loading, setLoading } = useLoading(true);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const { data } = await queryAllotList();
+      allotListData.value = data.data;
+      renderData.value = allotListData.value;
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+
+  const search = () => {
+    setLoading(true);
+    renderData.value = allotListData.value.filter(
+      (e: AllotListRelevant) =>
+        (e.chineseTitle.includes(formModel.value.title) ||
+          e.englishTitle.includes(formModel.value.title)) &&
+        e.name.includes(formModel.value.name) &&
+        e.number.includes(formModel.value.number) &&
+        e.college.includes(formModel.value.college) &&
+        (e.fileState === formModel.value.fileState ||
+          formModel.value.fileState === undefined) &&
+        (formModel.value.uploadTime.length === 0 ||
+          dayjs(e.uploadTime).isBetween(
+            formModel.value.uploadTime[0],
+            formModel.value.uploadTime[1]
+          ))
+    );
+    setLoading(false);
+  };
+  const reset = () => {
+    formModel.value = generateFormModel();
+  };
+
   watch(
     () => columns.value,
     (val) => {
@@ -422,19 +465,6 @@
     },
     { deep: true, immediate: true }
   );
-
-  const visible = ref(false);
-  const handleClick = () => {
-    visible.value = true;
-
-    // window.console.log(selectIds.value, renderData.value);
-  };
-  const handleOk = () => {
-    visible.value = false;
-  };
-  const handleCancel = () => {
-    visible.value = false;
-  };
 </script>
 
 <style scoped lang="less">

@@ -42,7 +42,7 @@
   import { TableData } from '@arco-design/web-vue';
   import dayjs from 'dayjs';
 
-  const props = defineProps({
+  defineProps({
     renderData: {
       type: Array as PropType<TableData[]>,
       default() {
@@ -50,8 +50,6 @@
       },
     },
   });
-
-  window.console.log(props.renderData);
 </script>
 
 <style scoped lang="less">

@@ -37,8 +37,6 @@
         (a: any, b: any) =>
           dayjs(b.time as string).valueOf() - dayjs(a.time as string).valueOf()
       );
-
-      window.console.log(renderData.value);
     } catch (err) {
       // you can report use errorHandler or other
     } finally {

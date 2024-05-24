@@ -54,3 +54,21 @@ export function queryTheServiceList() {
 export function queryRulesPresetList() {
   return axios.get('/api/list/rules-preset');
 }
+
+// ------------------------------------------------
+
+export interface AllotListRelevant {
+  id: number;
+  role: number;
+  name: string;
+  number: string;
+  college: string;
+  fileState: number;
+  chineseTitle: string;
+  englishTitle: string;
+  uploadTime: string;
+}
+
+export function queryAllotList() {
+  return axios.post<{ data: AllotListRelevant[] }>('/api/v1/thesis/allotList');
+}
