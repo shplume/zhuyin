@@ -8,18 +8,14 @@
             <a-col :span="24">
               <a-tabs :default-active-tab="1" type="rounded">
                 <a-tab-pane key="1" :title="'全部'">
-                  <QualityInspection />
-                  <TheService />
-                  <RulesPreset />
+                  <ThesisUnderway />
+                  <ThesisAccomplish />
                 </a-tab-pane>
-                <a-tab-pane key="2" :title="'待评阅'">
-                  <QualityInspection />
+                <a-tab-pane key="2" :title="'评阅中'">
+                  <ThesisUnderway />
                 </a-tab-pane>
-                <a-tab-pane key="3" :title="'评阅中'">
-                  <TheService />
-                </a-tab-pane>
-                <a-tab-pane key="4" :title="'评阅完成'">
-                  <RulesPreset />
+                <a-tab-pane key="3" :title="'评阅完成'">
+                  <ThesisAccomplish />
                 </a-tab-pane>
               </a-tabs>
             </a-col>
@@ -35,9 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-  import QualityInspection from './components/quality-inspection.vue';
-  import TheService from './components/the-service.vue';
-  import RulesPreset from './components/rules-preset.vue';
+  import ThesisUnderway from './components/thesis-underway.vue';
+  import ThesisAccomplish from './components/thesis-accomplish.vue';
 </script>
 
 <style scoped lang="less">
