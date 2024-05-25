@@ -35,3 +35,17 @@ export interface LoginRes {
 export function logout() {
   return axios.post<LoginRes>('/api/v1/user/logout');
 }
+
+export interface TeacherListRelevant {
+  id: number;
+  name: string;
+  phone: string;
+  number: string;
+  college: string;
+}
+
+export function queryTeacherList() {
+  return axios.post<{ data: TeacherListRelevant[] }>(
+    '/api/v1/user/teacherList'
+  );
+}

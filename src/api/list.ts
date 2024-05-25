@@ -72,3 +72,12 @@ export interface AllotListRelevant {
 export function queryAllotList() {
   return axios.post<{ data: AllotListRelevant[] }>('/api/v1/thesis/allotList');
 }
+
+export interface AllocationRelevant {
+  thesisIds: number[];
+  teacherId: number;
+}
+
+export function queryAllocation(data: AllocationRelevant) {
+  return axios.post('/api/v1/thesis/allocation', data);
+}

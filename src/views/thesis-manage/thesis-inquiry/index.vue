@@ -169,6 +169,7 @@
         :data="renderData"
         :bordered="false"
         :size="size"
+        :selected-keys="selectIds"
         @page-change="
           (e) => {
             pagination.current = e;
@@ -219,7 +220,24 @@
           </a-table-column>
           <a-table-column :title="'状态'" data-index="fileState">
             <template #cell="{ record }">
-              {{ record.fileState }}
+              <p v-if="record.fileState === 1">
+                <span>待上传</span>
+              </p>
+              <p v-if="record.fileState === 2">
+                <span>待评审</span>
+              </p>
+              <p v-if="record.fileState === 3">
+                <span>评审中</span>
+              </p>
+              <p v-if="record.fileState === 4">
+                <span>评审完成</span>
+              </p>
+              <p v-if="record.fileState === 5">
+                <span>打回</span>
+              </p>
+              <p v-if="record.fileState === 6">
+                <span>弃用</span>
+              </p>
             </template>
           </a-table-column>
           <a-table-column :title="'操作'" data-index="operate">
@@ -234,14 +252,16 @@
     <a-modal
       v-model:visible="isVisible"
       :width="814"
-      @ok="() => {}"
-      @cancel="() => {}"
+      :ok-loading="allocationLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      @before-open="fetchTeacherList"
     >
       <template #title> 请选择当前需要评阅的老师 </template>
-      <a-radio-group>
+      <a-radio-group v-if="!teacherLoading" v-model="teacherId">
         <a-space wrap>
-          <template v-for="item in 4" :key="item">
-            <a-radio :value="item">
+          <template v-for="item in teacherList" :key="item.number">
+            <a-radio :value="item.id">
               <template #radio="{ checked }">
                 <a-space
                   :align="'start'"
@@ -254,10 +274,10 @@
                   </div>
                   <div>
                     <div className="custom-radio-card-title">
-                      radio Card {{ item }}
+                      {{ item.name }}
                     </div>
                     <a-typography-text type="secondary">
-                      this is a text
+                      院系：{{ item.college }}
                     </a-typography-text>
                   </div>
                 </a-space>
@@ -266,6 +286,7 @@
           </template>
         </a-space>
       </a-radio-group>
+      <a-spin v-else dot />
     </a-modal>
   </div>
 </template>
@@ -273,7 +294,12 @@
 <script lang="ts" setup>
   import { ref, computed, nextTick, reactive, watch } from 'vue';
   import { Pagination } from '@/types/global';
-  import { queryAllotList, AllotListRelevant } from '@/api/list';
+  import {
+    queryAllotList,
+    AllotListRelevant,
+    queryAllocation,
+  } from '@/api/list';
+  import { queryTeacherList, TeacherListRelevant } from '@/api/user';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
   import type {
     TableColumnData,
@@ -284,6 +310,7 @@
   import Sortable from 'sortablejs';
   import dayjs from 'dayjs';
   import isBetween from 'dayjs/plugin/isBetween';
+  import { Message } from '@arco-design/web-vue';
 
   dayjs.extend(isBetween);
 
@@ -301,12 +328,28 @@
 
   const statusOptions = computed<SelectOptionData[]>(() => [
     {
-      label: '1',
+      label: '待上传',
       value: 1,
     },
     {
-      label: '2',
+      label: '待评审',
       value: 2,
+    },
+    {
+      label: '评审中',
+      value: 3,
+    },
+    {
+      label: '评审完成',
+      value: 4,
+    },
+    {
+      label: '打回',
+      value: 5,
+    },
+    {
+      label: '弃用',
+      value: 6,
     },
   ]);
 
@@ -440,21 +483,8 @@
   const selectIds = ref<(string | number)[]>([]);
   const renderData = ref<AllotListRelevant[]>([]);
   const allotListData = ref<AllotListRelevant[]>([]);
-  const { loading, setLoading } = useLoading(true);
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await queryAllotList();
-      allotListData.value = data.data;
-      renderData.value = allotListData.value;
-    } catch (err) {
-      // you can report use errorHandler or other
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchData();
 
+  const { loading, setLoading } = useLoading(false);
   const search = () => {
     setLoading(true);
     renderData.value = allotListData.value.filter(
@@ -476,13 +506,73 @@
   };
   const reset = () => {
     formModel.value = generateFormModel();
-    renderData.value = allotListData.value;
+    search();
   };
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const { data } = await queryAllotList();
+      allotListData.value = data.data;
+      renderData.value = allotListData.value;
+      search();
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+
   const isVisible = ref(false);
+  const teacherId = ref<number | undefined>(undefined);
   const submitConfirm = () => {
+    if (selectIds.value.length === 0) {
+      Message.warning('请先选择要分配的论文');
+      return;
+    }
     isVisible.value = true;
-    window.console.log(selectIds.value);
+  };
+
+  const { loading: allocationLoading, setLoading: allocationSetLoading } =
+    useLoading(false);
+  const handleOk = async () => {
+    try {
+      allocationSetLoading(true);
+      const res = await queryAllocation({
+        thesisIds: selectIds.value as number[],
+        teacherId: teacherId.value as number,
+      });
+
+      if (res.status === 200) {
+        teacherId.value = undefined;
+        fetchData();
+        selectIds.value = [];
+      }
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      allocationSetLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    teacherId.value = undefined;
+  };
+
+  const teacherList = ref<TeacherListRelevant[]>([]);
+  const { loading: teacherLoading, setLoading: teacherSetLoading } =
+    useLoading(false);
+  const fetchTeacherList = async () => {
+    try {
+      teacherSetLoading(true);
+      const { data } = await queryTeacherList();
+      teacherList.value = data.data;
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      teacherSetLoading(false);
+    }
   };
 
   watch(
