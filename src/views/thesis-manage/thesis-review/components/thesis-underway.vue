@@ -3,7 +3,10 @@
     <a-typography-title class="block-title" :heading="6">
       评阅中
     </a-typography-title>
-    <a-row class="list-row" :gutter="24">
+    <div v-if="loading" class="list-loading">
+      <a-spin dot />
+    </div>
+    <a-row v-else class="list-row" :gutter="24">
       <a-col
         v-for="item in renderData"
         :key="item.id"
@@ -18,37 +21,142 @@
       >
         <div class="card-wrap">
           <a-card :bordered="false" hoverable>
-            <a-avatar
-              :size="24"
-              style="margin-right: 8px; background-color: #626aea"
-            >
-              <icon-filter />
-            </a-avatar>
-            <template #actions>
-              <a-space>
-                <a-button @click="() => {}"> closeTxt </a-button>
-                <a-button type="primary" @click="() => {}"> openTxt </a-button>
-              </a-space>
-            </template>
+            <div style="height: 70%">
+              <div
+                style="
+                  font-size: 18px;
+                  font-weight: bold;
+                  margin-bottom: 4px;
+                  margin-bottom: 8px;
+                "
+              >
+                {{ item.chineseTitle }}
+              </div>
+              <div>
+                {{ item.englishTitle }}
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row; height: 30%">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  height: 100%;
+                  width: 50%;
+                "
+              >
+                {{ `上传者：${item.name}` }}
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  flex-direction: row-reverse;
+                  height: 100%;
+                  width: 50%;
+                "
+              >
+                <a-button type="primary" @click="onAppraise(item.id)">
+                  评阅
+                </a-button>
+              </div>
+            </div>
           </a-card>
         </div>
       </a-col>
     </a-row>
+
+    <a-modal
+      v-model:visible="visible"
+      :width="1480"
+      @ok="() => {}"
+      @cancel="() => {}"
+      @before-open="handleBeforeOpen"
+    >
+      <template #title> 论文评阅 </template>
+      <div style="height: 720px">
+        <div v-show="!pdfLoading" id="mypdf" style="height: 100%"></div>
+      </div>
+      <a-spin v-show="pdfLoading" dot />
+
+      <template #footer>
+        <a-space :align="'center'">
+          <a-button>取消</a-button>
+          <a-upload action="/">上传评阅书</a-upload>
+        </a-space>
+      </template>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { queryTheServiceList, ServiceRecord } from '@/api/list';
-  import useRequest from '@/hooks/request';
+  import { ref } from 'vue';
+  import {
+    queryReviewList,
+    ReviewListRelevant,
+    queryDownload,
+  } from '@/api/list';
+  import useLoading from '@/hooks/loading';
+  import PDFObject from 'pdfobject';
+  import dayjs from 'dayjs';
 
-  const defaultValue: ServiceRecord[] = new Array(4).fill({});
-  const { loading, response: renderData } = useRequest<ServiceRecord[]>(
-    queryTheServiceList,
-    defaultValue
-  );
+  const renderData = ref<ReviewListRelevant[]>([]);
+
+  const { loading, setLoading } = useLoading(true);
+  const fetchData = async () => {
+    try {
+      const { data } = await queryReviewList();
+
+      renderData.value = data.data
+        .sort(
+          (a: any, b: any) =>
+            dayjs(b.uploadTime as string).valueOf() -
+            dayjs(a.uploadTime as string).valueOf()
+        )
+        .filter((e) => e.fileState === 3);
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+
+  const visible = ref(false);
+  const thesisId = ref(0);
+  const onAppraise = (id: number) => {
+    thesisId.value = id;
+    visible.value = true;
+  };
+  const { loading: pdfLoading, setLoading: pdfSetLoading } = useLoading(false);
+  const handleBeforeOpen = async () => {
+    try {
+      pdfSetLoading(true);
+      const res = await queryDownload({
+        thesisId: thesisId.value,
+      });
+      const blob = new Blob([res.data], {
+        type: 'application/pdf;chartset=UTF-8',
+      });
+      const url = window.URL.createObjectURL(blob);
+      PDFObject.embed(url, '#mypdf');
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      pdfSetLoading(false);
+    }
+  };
 </script>
 
 <style scoped lang="less">
+  .list-loading {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .card-wrap {
     height: 100%;
     transition: all 0.3s;

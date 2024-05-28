@@ -3,9 +3,9 @@
 </template>
 
 <script setup>
+  import { onMounted } from 'vue';
   import PDFObject from 'pdfobject';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  import { onMounted } from 'vue';
 
   onMounted(() => {
     const url = 'https://soft.xiaoz.org/office/hee%20hee.pdf';

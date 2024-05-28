@@ -81,3 +81,39 @@ export interface AllocationRelevant {
 export function queryAllocation(data: AllocationRelevant) {
   return axios.post('/api/v1/thesis/allocation', data);
 }
+
+export interface ReviewListRelevant {
+  id: number;
+  name: string;
+  number: string;
+  college: string;
+  phone: string;
+  fileName: string;
+  fileState: number;
+  chineseTitle: string;
+  englishTitle: string;
+  authors: string[];
+  teachers: string[];
+  firstAdvance: string;
+  secondAdvance: string;
+  thirdAdvance: string;
+  drawback: string;
+  uploadTime: string;
+  createTime: string;
+}
+
+export function queryReviewList() {
+  return axios.post<{ data: ReviewListRelevant[] }>(
+    '/api/v1/thesis/reviewList'
+  );
+}
+
+export interface DownloadRelevant {
+  thesisId: number;
+}
+
+export function queryDownload(data: DownloadRelevant) {
+  return axios.post('/api/v1/thesis/download', data, {
+    responseType: 'blob',
+  });
+}

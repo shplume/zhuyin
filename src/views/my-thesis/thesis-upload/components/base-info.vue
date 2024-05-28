@@ -14,10 +14,6 @@
           required: true,
           message: '请输入中文标题',
         },
-        {
-          match: /^[a-zA-Z0-9\u4e00-\u9fa5]{1,40}$/,
-          message: '最多 40 字',
-        },
       ]"
     >
       <a-input v-model="formData.chineseTitle" :placeholder="'最多 40 字'" />
@@ -29,10 +25,6 @@
         {
           required: true,
           message: '请输入英文标题',
-        },
-        {
-          match: /^[a-zA-Z0-9\u4e00-\u9fa5]{1,20}$/,
-          message: '最多 100 字',
         },
       ]"
     >

@@ -3,7 +3,10 @@
     <a-typography-title class="block-title" :heading="6">
       评阅完成
     </a-typography-title>
-    <a-row class="list-row" :gutter="24">
+    <div v-if="loading" class="list-loading">
+      <a-spin dot />
+    </div>
+    <a-row v-else class="list-row" :gutter="24">
       <a-col
         v-for="item in renderData"
         :key="item.id"
@@ -14,41 +17,114 @@
         :xl="6"
         :xxl="6"
         class="list-col"
-        style="min-height: 140px"
+        style="min-height: 162px"
       >
         <div class="card-wrap">
           <a-card :bordered="false" hoverable>
-            <a-avatar
-              :size="24"
-              style="margin-right: 8px; background-color: #626aea"
-            >
-              <icon-filter />
-            </a-avatar>
-            <template #actions>
-              <a-space>
-                <a-button @click="() => {}"> closeTxt </a-button>
-                <a-button type="primary" @click="() => {}"> openTxt </a-button>
-              </a-space>
-            </template>
+            <div style="height: 70%">
+              <div
+                style="
+                  font-size: 18px;
+                  font-weight: bold;
+                  margin-bottom: 4px;
+                  margin-bottom: 8px;
+                "
+              >
+                {{ item.chineseTitle }}
+              </div>
+              <div>
+                {{ item.englishTitle }}
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row; height: 30%">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  height: 100%;
+                  width: 50%;
+                "
+              >
+                {{ `上传者：${item.name}` }}
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  flex-direction: row-reverse;
+                  height: 100%;
+                  width: 50%;
+                "
+              >
+                <a-button type="primary" @click="onAppraise(item.id)">
+                  评阅
+                </a-button>
+              </div>
+            </div>
           </a-card>
         </div>
       </a-col>
     </a-row>
+
+    <a-modal
+      v-model:visible="visible"
+      @ok="() => {}"
+      @cancel="() => {}"
+      @before-open="handleBeforeOpen"
+    >
+      <template #title> Title </template>
+      <div
+        >You can customize modal body text by the current situation. This modal
+        will be closed immediately once you press the OK button.</div
+      >
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { queryRulesPresetList, ServiceRecord } from '@/api/list';
-  import useRequest from '@/hooks/request';
+  import { ref } from 'vue';
+  import { queryReviewList, ReviewListRelevant } from '@/api/list';
+  import useLoading from '@/hooks/loading';
+  import dayjs from 'dayjs';
 
-  const defaultValue: ServiceRecord[] = new Array(6).fill({});
-  const { loading, response: renderData } = useRequest<ServiceRecord[]>(
-    queryRulesPresetList,
-    defaultValue
-  );
+  const renderData = ref<ReviewListRelevant[]>([]);
+  const { loading, setLoading } = useLoading(true);
+  const fetchData = async () => {
+    try {
+      const { data } = await queryReviewList();
+
+      renderData.value = data.data
+        .sort(
+          (a: any, b: any) =>
+            dayjs(b.uploadTime as string).valueOf() -
+            dayjs(a.uploadTime as string).valueOf()
+        )
+        .filter((e) => e.fileState !== 3);
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+
+  const onAppraise = (id: number) => {
+    window.console.log(id);
+  };
+
+  const visible = ref(false);
+  const handleBeforeOpen = () => {};
 </script>
 
 <style scoped lang="less">
+  .list-loading {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .card-wrap {
     height: 100%;
     transition: all 0.3s;
