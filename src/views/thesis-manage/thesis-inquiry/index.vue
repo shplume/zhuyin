@@ -242,7 +242,12 @@
           </a-table-column>
           <a-table-column :title="'操作'" data-index="operate">
             <template #cell="{ record }">
-              {{ record.id }}
+              <a-link
+                :loading="thesisDownloadLoading"
+                @click="onThesisDownload(record)"
+              >
+                下载
+              </a-link>
             </template>
           </a-table-column>
         </template>
@@ -298,6 +303,7 @@
     queryAllotList,
     AllotListRelevant,
     queryAllocation,
+    queryDownload,
   } from '@/api/list';
   import { queryTeacherList, TeacherListRelevant } from '@/api/user';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
@@ -572,6 +578,37 @@
       // you can report use errorHandler or other
     } finally {
       teacherSetLoading(false);
+    }
+  };
+
+  const {
+    loading: thesisDownloadLoading,
+    setLoading: thesisDownloadSetLoading,
+  } = useLoading(false);
+  const onThesisDownload = async (e: any) => {
+    try {
+      thesisDownloadSetLoading(true);
+      const res = await queryDownload({
+        thesisId: e.id,
+      });
+
+      window.console.log(e);
+
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: 'application/pdf;chartset=UTF-8' })
+      );
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', e.chineseTitle);
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      thesisDownloadSetLoading(false);
     }
   };
 

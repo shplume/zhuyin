@@ -46,7 +46,7 @@
         loginConfig.value.account = rememberPassword ? account : '';
         loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
-        Message.error(err.message);
+        // you can report use errorHandler or other
       } finally {
         setLoading(false);
       }

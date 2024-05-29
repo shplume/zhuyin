@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getToken } from '@/utils/auth';
+import { Message } from '@arco-design/web-vue';
 
 export interface HttpResponse<T = unknown> {
   status: number;
@@ -34,6 +35,12 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
+    const errorCode = error.response.status;
+
+    if (errorCode === 500) {
+      Message.error(error.response.data.message);
+    }
+
     return Promise.reject(error);
   }
 );
