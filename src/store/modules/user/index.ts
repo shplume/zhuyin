@@ -40,16 +40,29 @@ const useUserStore = defineStore('user', {
       }
     },
 
-    // Info - Set user's information
-    setInfo(partial: Partial<UserState>) {
-      this.$patch(partial);
-    },
-
     // Info - Get user's information
     async info() {
       const res = await getUserInfo();
 
-      this.setInfo(res.data);
+      this.userId = res.data.userId;
+      this.account = res.data.account;
+      this.avatar = res.data.avatar;
+      this.name = res.data.name;
+      this.college = res.data.college;
+      this.phone = res.data.phone;
+      this.number = res.data.number;
+
+      if ((res.data.role as number) === 1) {
+        this.role = 'admin';
+      }
+
+      if ((res.data.role as number) === 2) {
+        this.role = 'teacher';
+      }
+
+      if ((res.data.role as number) === 3) {
+        this.role = 'student';
+      }
     },
 
     // Info - Reset user's information

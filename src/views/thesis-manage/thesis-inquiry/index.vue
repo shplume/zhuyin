@@ -592,10 +592,8 @@
         thesisId: e.id,
       });
 
-      window.console.log(e);
-
       const url = window.URL.createObjectURL(
-        new Blob([res.data], { type: 'application/pdf;chartset=UTF-8' })
+        new Blob([res.data], { type: 'application/pdf' })
       );
       const link = document.createElement('a');
       link.href = url;

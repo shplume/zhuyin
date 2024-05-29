@@ -6,7 +6,6 @@ import localeThesisUpload from '@/views/my-thesis/thesis-upload/locale/zh-CN';
 
 import localeThesisInquiry from '@/views/thesis-manage/thesis-inquiry/locale/zh-CN';
 import localeThesisReview from '@/views/thesis-manage/thesis-review/locale/zh-CN';
-import localeThesisView from '@/views/thesis-manage/thesis-view/locale/zh-CN';
 
 import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 import localeUserInfo from '@/views/user/info/locale/zh-CN';
@@ -24,7 +23,6 @@ export default {
   ...localeThesisUpload,
   ...localeThesisInquiry,
   ...localeThesisReview,
-  ...localeThesisView,
   ...localeUserSetting,
   ...localeUserInfo,
 };

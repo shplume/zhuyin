@@ -6,23 +6,20 @@
         <a-card class="general-card" :title="'论文评阅'">
           <a-row justify="space-between">
             <a-col :span="24">
-              <a-tabs :default-active-tab="1" type="rounded">
-                <a-tab-pane key="1" :title="'全部'">
-                  <ThesisUnderway />
-                  <ThesisAccomplish />
-                </a-tab-pane>
-                <a-tab-pane key="2" :title="'评阅中'">
-                  <ThesisUnderway />
-                </a-tab-pane>
-                <a-tab-pane key="3" :title="'评阅完成'">
-                  <ThesisAccomplish />
-                </a-tab-pane>
+              <a-tabs v-model:active-key="activeKey" type="rounded">
+                <a-tab-pane :key="1" :title="'全部'"> </a-tab-pane>
+                <a-tab-pane :key="2" :title="'评阅中'"> </a-tab-pane>
+                <a-tab-pane :key="3" :title="'评阅完成'"> </a-tab-pane>
               </a-tabs>
+              <ThesisUnderway v-show="activeKey === 1 || activeKey === 2" />
+              <ThesisAccomplish v-show="activeKey === 1 || activeKey === 3" />
             </a-col>
-            <a-input-search
-              :placeholder="'搜索'"
-              style="width: 240px; position: absolute; top: 60px; right: 20px"
-            />
+            <a-link style="position: absolute; top: 60px; right: 20px">
+              <template #icon>
+                <icon-download />
+              </template>
+              下载评阅书模板
+            </a-link>
           </a-row>
         </a-card>
       </a-col>
@@ -31,8 +28,11 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref } from 'vue';
   import ThesisUnderway from './components/thesis-underway.vue';
   import ThesisAccomplish from './components/thesis-accomplish.vue';
+
+  const activeKey = ref(1);
 </script>
 
 <style scoped lang="less">

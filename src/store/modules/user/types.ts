@@ -1,4 +1,4 @@
-export type RoleType = 0 | 1 | 2; // 	Admin 0 | Teacher 1 | Student 2
+export type RoleType = 'admin' | 'teacher' | 'student';
 export interface UserState {
   userId?: number;
   account?: string;

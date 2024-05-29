@@ -68,13 +68,14 @@
 
     <a-modal
       v-model:visible="visible"
-      :width="1480"
+      width="80%"
       @ok="() => {}"
       @cancel="() => {}"
       @before-open="handleBeforeOpen"
+      @close="handleClose"
     >
       <template #title> 论文评阅 </template>
-      <div style="height: 720px">
+      <div style="height: 70vh">
         <div v-show="!pdfLoading" id="mypdf" style="height: 100%"></div>
       </div>
       <a-spin v-show="pdfLoading" dot />
@@ -82,7 +83,27 @@
       <template #footer>
         <a-space :align="'center'">
           <a-button>取消</a-button>
-          <a-upload action="/">上传评阅书</a-upload>
+          <a-upload action="/">
+            <template #upload-button>
+              <a-button type="primary">上传评阅书</a-button>
+            </template>
+          </a-upload>
+
+          <a-trigger trigger="click" :show-arrow="true">
+            <a-button type="primary" status="danger">打回</a-button>
+            <template #content>
+              <div class="send-back">
+                <a-space :align="'center'">
+                  <a-input
+                    :style="{ width: '320px' }"
+                    placeholder="请输入打回原因"
+                    allow-clear
+                  />
+                  <a-button type="primary">确定</a-button>
+                </a-space>
+              </div>
+            </template>
+          </a-trigger>
         </a-space>
       </template>
     </a-modal>
@@ -97,8 +118,8 @@
     queryDownload,
   } from '@/api/list';
   import useLoading from '@/hooks/loading';
-  import PDFObject from 'pdfobject';
   import dayjs from 'dayjs';
+  import PDFObject from 'pdfobject';
 
   const renderData = ref<ReviewListRelevant[]>([]);
 
@@ -129,6 +150,7 @@
     visible.value = true;
   };
   const { loading: pdfLoading, setLoading: pdfSetLoading } = useLoading(false);
+  const pdfUrl = ref('');
   const handleBeforeOpen = async () => {
     try {
       pdfSetLoading(true);
@@ -136,15 +158,19 @@
         thesisId: thesisId.value,
       });
       const blob = new Blob([res.data], {
-        type: 'application/pdf;chartset=UTF-8',
+        type: 'application/pdf',
       });
-      const url = window.URL.createObjectURL(blob);
-      PDFObject.embed(url, '#mypdf');
+      pdfUrl.value = window.URL.createObjectURL(blob);
+      PDFObject.embed(pdfUrl.value, '#mypdf');
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       pdfSetLoading(false);
     }
+  };
+
+  const handleClose = () => {
+    window.URL.revokeObjectURL(pdfUrl.value);
   };
 </script>
 
@@ -214,5 +240,11 @@
         margin-top: 20px;
       }
     }
+  }
+
+  .send-back {
+    padding: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.8);
   }
 </style>

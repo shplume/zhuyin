@@ -37,7 +37,7 @@ axios.interceptors.response.use(
   (error) => {
     const errorCode = error.response.status;
 
-    if (errorCode === 500) {
+    if (errorCode !== 200) {
       Message.error(error.response.data.message);
     }
 
