@@ -10,6 +10,7 @@ const THESISMANAGE: AppRouteRecordRaw = {
     icon: 'icon-archive',
     requiresAuth: true,
     order: 1,
+    roles: ['admin', 'teacher'],
   },
   children: [
     {
@@ -19,7 +20,7 @@ const THESISMANAGE: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.thesisManage.inquiry',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['admin'],
       },
     },
     {
@@ -29,7 +30,7 @@ const THESISMANAGE: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.thesisManage.review',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['teacher'],
       },
     },
   ],

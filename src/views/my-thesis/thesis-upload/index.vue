@@ -2,7 +2,7 @@
   <div class="container">
     <Breadcrumb :items="['menu.myThesis', 'menu.myThesis.upload']" />
     <a-spin :loading="loading" style="width: 100%">
-      <a-card class="general-card">
+      <a-card class="general-card" :loading="stepLoading">
         <template #title> 论文上传 </template>
         <div class="wrapper">
           <a-steps
@@ -31,22 +31,46 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { Message, RequestOption } from '@arco-design/web-vue';
   import {
     queryCreateThesis,
     CreateThesisParameter,
     queryUploadThesis,
+    queryReviewRecord,
   } from '@/api/thesis';
   import useLoading from '@/hooks/loading';
+  import dayjs from 'dayjs';
   import BaseInfo from './components/base-info.vue';
   import ChannelInfo from './components/channel-info.vue';
   import Success from './components/success.vue';
 
-  const { loading, setLoading } = useLoading(false);
   const step = ref(1);
   const thesisId = ref('');
 
+  const { loading: stepLoading, setLoading: stepSetLoading } =
+    useLoading(false);
+  onMounted(async () => {
+    try {
+      stepSetLoading(true);
+      const { data } = await queryReviewRecord();
+
+      data.data.sort(
+        (a: any, b: any) =>
+          dayjs(b.time as string).valueOf() - dayjs(a.time as string).valueOf()
+      );
+
+      if (data.data.length !== 0 && data.data[0].status >= 1) {
+        step.value = 3;
+      }
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      stepSetLoading(false);
+    }
+  });
+
+  const { loading, setLoading } = useLoading(false);
   const createThesis = async (data: CreateThesisParameter) => {
     setLoading(true);
     try {

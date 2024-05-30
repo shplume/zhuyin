@@ -19,7 +19,7 @@ const MYTHESIS: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.myThesis.upload',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['student'],
       },
     },
     {
@@ -29,7 +29,7 @@ const MYTHESIS: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.myThesis.state',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['student'],
       },
     },
   ],

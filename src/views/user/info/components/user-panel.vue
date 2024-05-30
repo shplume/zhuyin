@@ -18,10 +18,11 @@
           </a-avatar>
         </template>
       </a-upload>
+
       <a-descriptions
         :data="renderData"
         :column="2"
-        align="right"
+        :align="'right'"
         layout="inline-horizontal"
         :label-style="{
           width: '140px',
@@ -34,17 +35,6 @@
           textAlign: 'left',
         }"
       >
-        <template #label="{ label }">{{ $t(label) }} :</template>
-        <template #value="{ value, data }">
-          <a-tag
-            v-if="data.label === 'userSetting.label.certification'"
-            color="green"
-            size="small"
-          >
-            已认证
-          </a-tag>
-          <span v-else>{{ value }}</span>
-        </template>
       </a-descriptions>
     </a-space>
   </a-card>
@@ -68,24 +58,20 @@
   };
   const renderData = [
     {
-      label: '用户名',
+      label: '用户名：',
       value: userStore.name,
     },
     {
-      label: '实名认证',
-      value: userStore.certification,
+      label: '院系：',
+      value: userStore.college,
     },
     {
-      label: '账号 ID',
-      value: userStore.accountId,
+      label: userStore.role === 'student' ? '学工号：' : '教工号：',
+      value: userStore.number,
     },
     {
-      label: '联系电话',
+      label: '电话：',
       value: userStore.phone,
-    },
-    {
-      label: '联系邮箱',
-      value: userStore.email,
     },
   ] as DescData[];
   const fileList = ref<FileItem[]>([file]);

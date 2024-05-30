@@ -7,8 +7,8 @@ import '@/views/thesis-manage/thesis-inquiry/mock';
 import '@/views/thesis-manage/thesis-review/mock';
 import '@/views/thesis-manage/thesis-view/mock';
 
-import '@/views/user/info/mock';
 import '@/views/user/setting/mock';
+import '@/views/user/info/mock';
 
 Mock.setup({
   timeout: '600-1000',

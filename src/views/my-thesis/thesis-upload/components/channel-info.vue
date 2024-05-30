@@ -6,6 +6,7 @@
       :custom-request="props.uploadThesisFunc"
       :limit="1"
       draggable
+      accept=".pdf"
       @success="successCallBack"
       @error="errorCallBack"
     >
