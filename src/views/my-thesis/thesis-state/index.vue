@@ -37,6 +37,14 @@
         (a: any, b: any) =>
           dayjs(b.time as string).valueOf() - dayjs(a.time as string).valueOf()
       );
+
+      if (data.data.length !== 0 && data.data[0].status === 1) {
+        step.value = 1;
+      }
+
+      if (data.data.length !== 0 && data.data[0].status === 2) {
+        step.value = 2;
+      }
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
@@ -44,12 +52,6 @@
     }
   };
   fetchData();
-</script>
-
-<script lang="ts">
-  export default {
-    name: 'Basic',
-  };
 </script>
 
 <style scoped lang="less">

@@ -17,12 +17,10 @@
           <a-table-column :title="'当前状态'" data-index="status">
             <template #cell="{ record }">
               <p v-if="record.status === 1">
-                <span class="circle"></span>
-                <span>审核中</span>
+                <span>待评阅</span>
               </p>
               <p v-if="record.status === 2">
-                <span class="circle pass"></span>
-                <span>已通过</span>
+                <span>评阅中</span>
               </p>
             </template>
           </a-table-column>
