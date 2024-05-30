@@ -73,9 +73,13 @@ const useUserStore = defineStore('user', {
     switchRoles() {
       return new Promise((resolve) => {
         if (this.role === undefined) {
-          this.role = 0;
-        } else {
-          this.role += 1 % 3;
+          this.role = 'admin';
+        } else if (this.role === 'admin') {
+          this.role = 'teacher';
+        } else if (this.role === 'teacher') {
+          this.role = 'student';
+        } else if (this.role === 'student') {
+          this.role = 'admin';
         }
         resolve(this.role);
       });
