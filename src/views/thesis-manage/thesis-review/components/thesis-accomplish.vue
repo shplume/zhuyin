@@ -56,33 +56,18 @@
                   width: 50%;
                 "
               >
-                <a-button type="primary" @click="onAppraise(item.id)">
-                  评阅
-                </a-button>
+                <a-tag size="large" color="green" bordered>评阅完成</a-tag>
               </div>
             </div>
           </a-card>
         </div>
       </a-col>
     </a-row>
-
-    <a-modal
-      v-model:visible="visible"
-      @ok="() => {}"
-      @cancel="() => {}"
-      @before-open="handleBeforeOpen"
-    >
-      <template #title> Title </template>
-      <div
-        >You can customize modal body text by the current situation. This modal
-        will be closed immediately once you press the OK button.</div
-      >
-    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { queryReviewList, ReviewListRelevant } from '@/api/list';
   import useLoading from '@/hooks/loading';
   import dayjs from 'dayjs';
@@ -108,12 +93,23 @@
   };
   fetchData();
 
-  const onAppraise = (id: number) => {
-    window.console.log(id);
-  };
+  const props = defineProps({
+    onFetchData: {
+      type: Boolean,
+      default() {
+        return () => {
+          return true;
+        };
+      },
+    },
+  });
 
-  const visible = ref(false);
-  const handleBeforeOpen = () => {};
+  watch(
+    () => props.onFetchData,
+    () => {
+      fetchData();
+    }
+  );
 </script>
 
 <style scoped lang="less">

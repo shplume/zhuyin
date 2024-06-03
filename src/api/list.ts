@@ -117,3 +117,13 @@ export function queryDownload(data: DownloadRelevant) {
     responseType: 'blob',
   });
 }
+
+export function queryUploadReviews(
+  data: FormData,
+  config: {
+    controller: AbortController;
+    onUploadProgress?: (progressEvent: any) => void;
+  }
+) {
+  return axios.post('/api/v1/review/upload', data, config);
+}

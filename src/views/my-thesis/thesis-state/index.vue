@@ -3,11 +3,11 @@
     <Breadcrumb :items="['menu.myThesis', 'menu.myThesis.state']" />
     <a-space direction="vertical" :size="16" fill>
       <a-card class="general-card" :title="'论文评审流程'" :loading="loading">
-        <template #extra>
+        <!-- <template #extra>
           <a-space>
             <a-button type="primary">{{ '取消评审流程' }}</a-button>
           </a-space>
-        </template>
+        </template> -->
         <a-steps v-model:current="step" line-less class="steps">
           <a-step>{{ '论文提交' }}</a-step>
           <a-step>{{ '评阅中' }}</a-step>

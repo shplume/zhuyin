@@ -69,21 +69,34 @@
     <a-modal
       v-model:visible="visible"
       width="80%"
-      @ok="() => {}"
-      @cancel="() => {}"
       @before-open="handleBeforeOpen"
       @close="handleClose"
     >
       <template #title> 论文评阅 </template>
-      <div style="height: 70vh">
-        <div v-show="!pdfLoading" id="mypdf" style="height: 100%"></div>
+      <div v-show="!pdfLoading" style="height: 70vh">
+        <div id="mypdf" style="height: 100%"></div>
       </div>
-      <a-spin v-show="pdfLoading" dot />
+      <div
+        v-show="pdfLoading"
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 70vh;
+          background: blue;
+        "
+      >
+        <a-spin dot />
+      </div>
 
       <template #footer>
         <a-space :align="'center'">
-          <a-button>取消</a-button>
-          <a-upload action="/">
+          <a-button @click="visible = false">取消</a-button>
+          <a-upload
+            :custom-request="customRequest"
+            :show-file-list="false"
+            @success="onOkSuccess"
+          >
             <template #upload-button>
               <a-button type="primary">上传评阅书</a-button>
             </template>
@@ -116,7 +129,9 @@
     queryReviewList,
     ReviewListRelevant,
     queryDownload,
+    queryUploadReviews,
   } from '@/api/list';
+  import { RequestOption } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
   import dayjs from 'dayjs';
   import PDFObject from 'pdfobject';
@@ -171,6 +186,49 @@
 
   const handleClose = () => {
     window.URL.revokeObjectURL(pdfUrl.value);
+  };
+
+  const customRequest = (options: RequestOption) => {
+    const controller = new AbortController();
+
+    (async function requestWrap() {
+      const { onProgress, onError, onSuccess, fileItem } = options;
+      onProgress(20);
+
+      const formData = new FormData();
+      formData.append('file', fileItem.file as Blob);
+      formData.append('thesisId', `${thesisId.value}`);
+
+      const onUploadProgress = (event: ProgressEvent) => {
+        let percent;
+        if (event.total > 0) {
+          percent = (event.loaded / event.total) * 100;
+        }
+        onProgress(parseInt(String(percent), 10), event);
+      };
+
+      try {
+        const res = await queryUploadReviews(formData, {
+          controller,
+          onUploadProgress,
+        });
+        onSuccess(res);
+      } catch (error) {
+        onError(error);
+      }
+    })();
+    return {
+      abort() {
+        controller.abort();
+      },
+    };
+  };
+
+  const emits = defineEmits(['messagePassing']);
+  const onOkSuccess = () => {
+    visible.value = false;
+    fetchData();
+    emits('messagePassing');
   };
 </script>
 

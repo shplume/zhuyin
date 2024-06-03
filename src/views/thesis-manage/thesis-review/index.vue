@@ -11,8 +11,14 @@
                 <a-tab-pane :key="2" :title="'评阅中'"> </a-tab-pane>
                 <a-tab-pane :key="3" :title="'评阅完成'"> </a-tab-pane>
               </a-tabs>
-              <ThesisUnderway v-show="activeKey === 1 || activeKey === 2" />
-              <ThesisAccomplish v-show="activeKey === 1 || activeKey === 3" />
+              <ThesisUnderway
+                v-show="activeKey === 1 || activeKey === 2"
+                @message-passing="messagePassing"
+              />
+              <ThesisAccomplish
+                v-show="activeKey === 1 || activeKey === 3"
+                :on-fetch-data="onFetchData"
+              />
             </a-col>
             <a-link style="position: absolute; top: 60px; right: 20px">
               <template #icon>
@@ -33,6 +39,11 @@
   import ThesisAccomplish from './components/thesis-accomplish.vue';
 
   const activeKey = ref(1);
+
+  const onFetchData = ref(true);
+  const messagePassing = () => {
+    onFetchData.value = !onFetchData.value;
+  };
 </script>
 
 <style scoped lang="less">
