@@ -5,7 +5,6 @@ import '@/views/login/mock';
 import '@/views/my-thesis/thesis-upload/mock';
 import '@/views/thesis-manage/thesis-inquiry/mock';
 import '@/views/thesis-manage/thesis-review/mock';
-import '@/views/thesis-manage/thesis-view/mock';
 
 import '@/views/user/setting/mock';
 import '@/views/user/info/mock';
