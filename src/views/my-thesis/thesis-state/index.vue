@@ -38,19 +38,19 @@
           dayjs(b.time as string).valueOf() - dayjs(a.time as string).valueOf()
       );
 
-      if (data.data.length !== 0 && data.data[0].status === 0) {
+      if (data.data.length !== 0 && data.data[0].status === 1) {
         step.value = 0;
       }
 
-      if (data.data.length !== 0 && data.data[0].status === 1) {
+      if (data.data.length !== 0 && data.data[0].status === 2) {
         step.value = 1;
       }
 
-      if (data.data.length !== 0 && data.data[0].status === 2) {
+      if (data.data.length !== 0 && data.data[0].status === 3) {
         step.value = 2;
       }
 
-      if (data.data.length !== 0 && data.data[0].status === 3) {
+      if (data.data.length !== 0 && data.data[0].status === 4) {
         step.value = 3;
       }
     } catch (err) {

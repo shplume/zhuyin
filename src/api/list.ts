@@ -127,3 +127,12 @@ export function queryUploadReviews(
 ) {
   return axios.post('/api/v1/review/upload', data, config);
 }
+
+export interface ReviewSendBackRelevant {
+  thesisId: number;
+  reason: string;
+}
+
+export function queryReviewSendBack(data: ReviewSendBackRelevant) {
+  return axios.post('/api/v1/review/sendBack', data);
+}
