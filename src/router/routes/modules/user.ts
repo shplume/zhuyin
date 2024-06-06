@@ -32,6 +32,16 @@ const USER: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'regist',
+      name: 'Regist',
+      component: () => import('@/views/user/registration/index.vue'),
+      meta: {
+        locale: 'menu.user.regist',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

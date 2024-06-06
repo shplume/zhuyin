@@ -1,6 +1,6 @@
 export default {
   'menu.user.info': '个人信息',
-
+  'menu.user.regist': '用户注册',
   'menu.user.setting': '用户设置',
   'userSetting.menu.title.info': '个人信息',
   'userSetting.menu.title.account': '账号设置',
