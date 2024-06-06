@@ -4,23 +4,26 @@
       <a-table :data="renderData">
         <template #columns>
           <a-table-column :title="'操作人'" data-index="name" />
-          <a-table-column :title="'操作内容'" data-index="context">
-            <template #cell="{ record }">
-              <p v-if="record.status === 1">
-                <span>论文上传</span>
-              </p>
-              <p v-if="record.status === 2">
-                <span>论文评阅</span>
-              </p>
-            </template>
-          </a-table-column>
           <a-table-column :title="'当前状态'" data-index="status">
             <template #cell="{ record }">
               <p v-if="record.status === 1">
-                <span>待评阅</span>
+                <span>论文退回</span>
               </p>
               <p v-if="record.status === 2">
+                <span>待评阅</span>
+              </p>
+              <p v-if="record.status === 3">
                 <span>评阅中</span>
+              </p>
+              <p v-if="record.status === 4">
+                <span>评阅完成</span>
+              </p>
+            </template>
+          </a-table-column>
+          <a-table-column :title="'操作内容'" data-index="context">
+            <template #cell="{ record }">
+              <p>
+                <span>{{ record.context }}</span>
               </p>
             </template>
           </a-table-column>

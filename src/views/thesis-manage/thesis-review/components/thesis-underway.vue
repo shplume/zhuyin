@@ -108,11 +108,18 @@
               <div class="send-back">
                 <a-space :align="'center'">
                   <a-input
+                    v-model="inputContext"
                     :style="{ width: '320px' }"
                     placeholder="请输入打回原因"
                     allow-clear
                   />
-                  <a-button type="primary">确定</a-button>
+                  <a-button
+                    type="primary"
+                    :loading="sendBackLoading"
+                    @click="onSendBack"
+                  >
+                    确定
+                  </a-button>
                 </a-space>
               </div>
             </template>
@@ -130,6 +137,7 @@
     ReviewListRelevant,
     queryDownload,
     queryUploadReviews,
+    queryReviewSendBack,
   } from '@/api/list';
   import { RequestOption } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
@@ -184,8 +192,10 @@
     }
   };
 
+  const inputContext = ref('');
   const handleClose = () => {
     window.URL.revokeObjectURL(pdfUrl.value);
+    inputContext.value = '';
   };
 
   const customRequest = (options: RequestOption) => {
@@ -229,6 +239,26 @@
     visible.value = false;
     fetchData();
     emits('messagePassing');
+  };
+
+  const { loading: sendBackLoading, setLoading: sendBackSetLoading } =
+    useLoading(false);
+  const onSendBack = async () => {
+    try {
+      sendBackSetLoading(true);
+      await queryReviewSendBack({
+        thesisId: thesisId.value,
+        reason: inputContext.value,
+      });
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      visible.value = false;
+      fetchData();
+      emits('messagePassing');
+      sendBackSetLoading(false);
+      inputContext.value = '';
+    }
   };
 </script>
 

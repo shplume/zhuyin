@@ -56,7 +56,12 @@
                   width: 50%;
                 "
               >
-                <a-tag size="large" color="green" bordered>评阅完成</a-tag>
+                <template v-if="item.fileState === 4">
+                  <a-tag size="large" color="green" bordered>评阅完成</a-tag>
+                </template>
+                <template v-if="item.fileState === 5">
+                  <a-tag size="large" color="red" bordered>退回</a-tag>
+                </template>
               </div>
             </div>
           </a-card>
