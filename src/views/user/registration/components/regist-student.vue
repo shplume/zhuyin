@@ -46,7 +46,6 @@
         number: '',
         account: '',
         password: '123456',
-        role: 'student',
       });
       const handleSubmit = () => {
         // console.log(data);

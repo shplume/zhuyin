@@ -36,7 +36,6 @@
         college: '',
         number: '',
         password: '123456',
-        role: 'teacher',
       });
       const handleSubmit = () => {
         // console.log(data);
