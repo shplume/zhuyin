@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts" setup>
-  import StudentInformation from '@/views/user/setting/components/student-information.vue';
-  import TeacherInformation from '@/views/user/setting/components/teacher-information.vue';
-  import AdminInformation from '@/views/user/setting/components/admin-information.vue';
+  // import StudentInformation from '@/views/user/setting/components/student-information.vue';
+  // import TeacherInformation from '@/views/user/setting/components/teacher-information.vue';
+  // import AdminInformation from '@/views/user/setting/components/admin-information.vue';
 </script>
 
 <style scoped lang="less">

@@ -4,11 +4,14 @@
     <a-row class="wrapper">
       <a-col :span="24">
         <a-tabs default-active-key="1" type="rounded">
-          <a-tab-pane key="1" :title="'用户注册'">
-            <regist />
+          <a-tab-pane key="1" :title="'管理员用户注册'">
+            <registAdmin />
           </a-tab-pane>
-          <a-tab-pane key="2" :title="'批量注册'">
-            <batch />
+          <a-tab-pane key="2" :title="'教师用户注册'">
+            <registTeacher />
+          </a-tab-pane>
+          <a-tab-pane key="3" :title="'学生用户注册'">
+            <registStudent />
           </a-tab-pane>
         </a-tabs>
       </a-col>
@@ -17,8 +20,10 @@
 </template>
 
 <script lang="ts" setup>
-  import regist from '@/views/user/registration/components/regist.vue';
-  import batch from '@/views/user/registration/components/batch.vue';
+  import registAdmin from '@/views/user/registration/components/regist-admin.vue';
+  import registTeacher from '@/views/user/registration/components/regist-teacher.vue';
+  import registStudent from '@/views/user/registration/components/regist-student.vue';
+  // import batch from '@/views/user/registration/components/batch.vue';
 </script>
 
 <style scoped lang="less">
