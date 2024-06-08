@@ -136,3 +136,11 @@ export interface ReviewSendBackRelevant {
 export function queryReviewSendBack(data: ReviewSendBackRelevant) {
   return axios.post('/api/v1/review/sendBack', data);
 }
+
+export interface RandomAllocationRelevant {
+  thesisIds: number[];
+}
+
+export function queryRandomAllocation(data: RandomAllocationRelevant) {
+  return axios.post('/api/v1/thesis/randomAllocation', data);
+}

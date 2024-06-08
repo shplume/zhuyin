@@ -96,7 +96,7 @@
             <icon-send style="margin-right: 8px" />
             送审
             <template #content>
-              <a-doption>
+              <a-doption @click="submitRandom">
                 <icon-relation style="margin-right: 8px" />
                 随机送审
               </a-doption>
@@ -304,6 +304,7 @@
     AllotListRelevant,
     queryAllocation,
     queryDownload,
+    queryRandomAllocation,
   } from '@/api/list';
   import { queryTeacherList, TeacherListRelevant } from '@/api/user';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
@@ -556,6 +557,30 @@
         selectIds.value = [];
       }
     } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      allocationSetLoading(false);
+    }
+  };
+
+  const submitRandom = async () => {
+    if (selectIds.value.length === 0) {
+      Message.warning('请先选择要分配的论文');
+      return;
+    }
+
+    try {
+      allocationSetLoading(true);
+      const res = await queryRandomAllocation({
+        thesisIds: selectIds.value as number[],
+      });
+
+      if (res.status === 200) {
+        teacherId.value = undefined;
+        fetchData();
+        selectIds.value = [];
+      }
+    } catch (error) {
       // you can report use errorHandler or other
     } finally {
       allocationSetLoading(false);
