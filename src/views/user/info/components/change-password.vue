@@ -7,24 +7,24 @@
     :wrapper-col-props="{ span: 16 }"
   >
     <a-form-item
-      field="name"
-      :label="'姓名'"
+      field="orginal"
+      :label="'原密码'"
       :rules="[
         {
           required: true,
-          message: '姓名是必填项',
+          message: '请输入原密码',
         },
       ]"
     >
       <a-input v-model="formData.name" />
     </a-form-item>
     <a-form-item
-      field="number"
-      :label="'电话'"
+      field="current"
+      :label="'更改密码'"
       :rules="[
         {
           required: true,
-          message: '电话是必填项',
+          message: '请输入更改后密码',
         },
       ]"
     >
@@ -32,12 +32,12 @@
     </a-form-item>
 
     <a-form-item
-      field="department"
-      :label="'院系'"
+      field="ensure"
+      :label="'确认密码'"
       :rules="[
         {
           required: true,
-          message: '院系是必填项',
+          message: '请确认密码',
         },
       ]"
     >
@@ -62,9 +62,9 @@
 
   const formRef = ref<FormInstance>();
   const formData = ref<any>({
-    name: '',
-    number: '',
-    department: '',
+    orginal: '',
+    current: '',
+    ensure: '',
   });
   const validate = async () => {
     const res = await formRef.value?.validate();
