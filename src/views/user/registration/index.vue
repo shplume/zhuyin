@@ -23,7 +23,6 @@
   import registAdmin from '@/views/user/registration/components/regist-admin.vue';
   import registTeacher from '@/views/user/registration/components/regist-teacher.vue';
   import registStudent from '@/views/user/registration/components/regist-student.vue';
-  // import batch from '@/views/user/registration/components/batch.vue';
 </script>
 
 <style scoped lang="less">

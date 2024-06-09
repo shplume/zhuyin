@@ -49,3 +49,44 @@ export function queryTeacherList() {
     '/api/v1/user/teacherList'
   );
 }
+
+export interface RegisterAdmin {
+  account: string;
+  password: string;
+  name: string;
+  phone: string;
+  number: string;
+  college: string;
+}
+
+export function queryRegisterAdmin(data: RegisterAdmin) {
+  return axios.post('/api/v1/user/register/admin', data);
+}
+
+export interface RegisterTeacher {
+  account: string;
+  password: string;
+  name: string;
+  phone: string;
+  number: string;
+  college: string;
+}
+
+export function queryRegisterTeacher(data: RegisterTeacher) {
+  return axios.post('/api/v1/user/register/teacher', data);
+}
+
+export interface RegisterStudent {
+  account: string; // 账户
+  password: string; // 密码
+  name: string; // 姓名
+  college: string; // 院系
+  phone: string; // 电话
+  major: string; // 专业
+  class: string; // 班级
+  number: string; // 学工号
+}
+
+export function queryRegisterStudent(data: RegisterStudent) {
+  return axios.post('/api/v1/user/register/student', data);
+}
