@@ -15,9 +15,6 @@
           <a-tab-pane key="2" :title="'修改密码'">
             <Password />
           </a-tab-pane>
-          <a-tab-pane key="3" :title="'修改信息'">
-            <AdminInformation />
-          </a-tab-pane>
         </a-tabs>
       </a-col>
     </a-row>
@@ -30,9 +27,6 @@
           <a-tab-pane key="2" :title="'修改密码'">
             <Password />
           </a-tab-pane>
-          <a-tab-pane key="4" :title="'信息修改'">
-            <TeacherInformation />
-          </a-tab-pane>
         </a-tabs>
       </a-col>
     </a-row>
@@ -44,9 +38,6 @@
           </a-tab-pane>
           <a-tab-pane key="2" :title="'修改密码'">
             <Password />
-          </a-tab-pane>
-          <a-tab-pane key="5" :title="'信息修改'">
-            <StudentInformation />
           </a-tab-pane>
         </a-tabs>
       </a-col>

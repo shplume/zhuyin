@@ -7,12 +7,9 @@
         </template>
         <template #description>
           <div class="content">
-            <a-typography-paragraph v-model:editText="userinfo.name" editable>
+            <a-typography-paragraph>
               {{ userinfo.name }}
             </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link> 修改 </a-link>
           </div>
         </template>
       </a-list-item-meta>
@@ -25,15 +22,9 @@
         </template>
         <template #description>
           <div class="content">
-            <a-typography-paragraph
-              v-model:editText="userinfo.college"
-              editable
-            >
+            <a-typography-paragraph>
               {{ userinfo.college }}
             </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link> 修改 </a-link>
           </div>
         </template>
       </a-list-item-meta>
@@ -46,12 +37,9 @@
         </template>
         <template #description>
           <div class="content">
-            <a-typography-paragraph v-model:editText="userinfo.phone" editable>
+            <a-typography-paragraph>
               {{ userinfo.phone }}
             </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link> 修改 </a-link>
           </div>
         </template>
       </a-list-item-meta>
@@ -64,12 +52,9 @@
         </template>
         <template #description>
           <div class="content">
-            <a-typography-paragraph v-model:editText="userinfo.number" editable>
+            <a-typography-paragraph>
               {{ userinfo.number }}
             </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link> 修改 </a-link>
           </div>
         </template>
       </a-list-item-meta>
@@ -82,12 +67,9 @@
         </template>
         <template #description>
           <div class="content">
-            <a-typography-paragraph v-model:editText="userinfo.number" editable>
+            <a-typography-paragraph>
               {{ userinfo.number }}
             </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link> 修改 </a-link>
           </div>
         </template>
       </a-list-item-meta>
