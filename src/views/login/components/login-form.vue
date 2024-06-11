@@ -33,7 +33,8 @@
         });
         const { redirect, ...othersQuery } = router.currentRoute.value.query;
         router.push({
-          name: redirect || 'myThesis',
+          // name: redirect || userStore.role === 'admin' ? '',
+          name: redirect || 'info',
           query: {
             ...othersQuery,
           },
