@@ -13,6 +13,9 @@
           <a-tab-pane key="3" :title="'学生用户注册'">
             <registStudent />
           </a-tab-pane>
+          <a-tab-pane key="4" :title="'上传评阅书模板'">
+            <UploadReview />
+          </a-tab-pane>
         </a-tabs>
       </a-col>
     </a-row>
@@ -23,6 +26,7 @@
   import registAdmin from '@/views/user/registration/components/regist-admin.vue';
   import registTeacher from '@/views/user/registration/components/regist-teacher.vue';
   import registStudent from '@/views/user/registration/components/regist-student.vue';
+  import UploadReview from '@/views/user/registration/components/upload-review.vue';
 </script>
 
 <style scoped lang="less">

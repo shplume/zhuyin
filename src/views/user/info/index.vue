@@ -48,9 +48,6 @@
 <script lang="ts" setup>
   import UserPanel from '@/views/user/info/components/user-panel.vue';
   import SecuritySettings from '@/views/user/info/components/security-settings.vue';
-  import StudentInformation from '@/views/user/info/components/student-information.vue';
-  import TeacherInformation from '@/views/user/info/components/teacher-information.vue';
-  import AdminInformation from '@/views/user/info/components/admin-information.vue';
   import Password from '@/views/user/info/components/change-password.vue';
 </script>
 

@@ -148,3 +148,13 @@ export interface RandomAllocationRelevant {
 export function queryRandomAllocation(data: RandomAllocationRelevant) {
   return axios.post('/api/v1/thesis/randomAllocation', data);
 }
+
+export function queryUploadReviewsTemplate(
+  data: FormData,
+  config: {
+    controller: AbortController;
+    onUploadProgress?: (progressEvent: any) => void;
+  }
+) {
+  return axios.post('/api/v1/review/upload', data, config);
+}
