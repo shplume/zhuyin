@@ -92,6 +92,7 @@
           :span="12"
           style="display: flex; align-items: center; justify-content: end"
         >
+          <a-button type="primary" style="margin-right: 8px">打包下载</a-button>
           <a-dropdown-button type="primary" @click="submitConfirm">
             <icon-send style="margin-right: 8px" />
             送审

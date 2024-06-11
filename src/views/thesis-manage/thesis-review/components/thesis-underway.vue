@@ -135,7 +135,7 @@
   import {
     queryReviewList,
     ReviewListRelevant,
-    queryDownload,
+    queryShow,
     queryUploadReviews,
     queryReviewSendBack,
   } from '@/api/list';
@@ -177,13 +177,10 @@
   const handleBeforeOpen = async () => {
     try {
       pdfSetLoading(true);
-      const res = await queryDownload({
+      const res = await queryShow({
         thesisId: thesisId.value,
       });
-      const blob = new Blob([res.data], {
-        type: 'application/pdf',
-      });
-      pdfUrl.value = window.URL.createObjectURL(blob);
+      pdfUrl.value = res.data.data;
       PDFObject.embed(pdfUrl.value, '#mypdf');
     } catch (err) {
       // you can report use errorHandler or other

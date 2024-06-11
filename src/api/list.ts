@@ -112,6 +112,10 @@ export interface DownloadRelevant {
   thesisId: number;
 }
 
+export function queryShow(data: DownloadRelevant) {
+  return axios.post('/api/v1/thesis/show', data);
+}
+
 export function queryDownload(data: DownloadRelevant) {
   return axios.post('/api/v1/thesis/download', data, {
     responseType: 'blob',
