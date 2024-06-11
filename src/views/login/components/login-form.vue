@@ -1,60 +1,3 @@
-<script setup>
-  import { reactive } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { Message } from '@arco-design/web-vue';
-  import { useStorage } from '@vueuse/core';
-  import { useUserStore } from '@/store';
-  import useLoading from '@/hooks/loading';
-
-  const router = useRouter();
-  const userStore = useUserStore();
-
-  const loginConfig = useStorage('login-config', {
-    rememberPassword: true,
-    account: '',
-    password: '',
-  });
-
-  const userAndRegisterInfo = reactive({
-    account: loginConfig.value.account,
-    password: loginConfig.value.password,
-  });
-
-  const { loading, setLoading } = useLoading();
-  const handleSubmit = async ({ errors, values }) => {
-    if (loading.value) return;
-
-    if (!errors) {
-      setLoading(true);
-      try {
-        await userStore.login({
-          account: values.account,
-          password: values.password,
-        });
-        const { redirect, ...othersQuery } = router.currentRoute.value.query;
-        router.push({
-          // name: redirect || userStore.role === 'admin' ? '',
-          name: redirect || 'info',
-          query: {
-            ...othersQuery,
-          },
-        });
-        Message.success('欢迎使用');
-        const { rememberPassword } = loginConfig.value;
-        const { account, password } = values;
-        // 实际生产环境需要进行加密存储。
-        // The actual production environment requires encrypted storage.
-        loginConfig.value.account = rememberPassword ? account : '';
-        loginConfig.value.password = rememberPassword ? password : '';
-      } catch (err) {
-        // you can report use errorHandler or other
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-</script>
-
 <template>
   <div class="box">
     <div class="login-form-wrapper">
@@ -102,16 +45,6 @@
           </a-input-password>
         </a-form-item>
 
-        <div class="login-form-password-actions">
-          <a-checkbox
-            checked="rememberPassword"
-            :model-value="loginConfig.rememberPassword"
-          >
-            {{ '记住密码' }}
-          </a-checkbox>
-          <a-link class="font">{{ '忘记密码' }}</a-link>
-        </div>
-
         <div style="margin-bottom: 12px"></div>
 
         <a-button type="primary" html-type="submit" :loading="loading">
@@ -123,6 +56,49 @@
     </div>
   </div>
 </template>
+
+<script setup>
+  import { reactive } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { Message } from '@arco-design/web-vue';
+  import { useUserStore } from '@/store';
+  import useLoading from '@/hooks/loading';
+
+  const router = useRouter();
+  const userStore = useUserStore();
+
+  const userAndRegisterInfo = reactive({
+    account: '',
+    password: '',
+  });
+
+  const { loading, setLoading } = useLoading();
+  const handleSubmit = async ({ errors, values }) => {
+    if (loading.value) return;
+
+    if (!errors) {
+      setLoading(true);
+      try {
+        await userStore.login({
+          account: values.account,
+          password: values.password,
+        });
+        const { redirect, ...othersQuery } = router.currentRoute.value.query;
+        router.push({
+          name: redirect || 'Info',
+          query: {
+            ...othersQuery,
+          },
+        });
+        Message.success('欢迎使用');
+      } catch (err) {
+        // you can report use errorHandler or other
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+</script>
 
 <style lang="less" scoped>
   .font {
