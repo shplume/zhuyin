@@ -47,7 +47,7 @@
             :size="32"
             :style="{ marginRight: '8px', cursor: 'pointer' }"
           >
-            <img alt="avatar" :src="avatar" />
+            {{ name }}
           </a-avatar>
           <template #content>
             <a-doption>
@@ -76,8 +76,8 @@
   const userStore = useUserStore();
   const { logout } = useUser();
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
-  const avatar = computed(() => {
-    return userStore.avatar;
+  const name = computed(() => {
+    return userStore.name[0];
   });
   const topMenu = computed(() => appStore.topMenu && appStore.menu);
   const handleLogout = () => {
