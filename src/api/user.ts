@@ -90,3 +90,12 @@ export interface RegisterStudent {
 export function queryRegisterStudent(data: RegisterStudent) {
   return axios.post('/api/v1/user/register/student', data);
 }
+
+export interface EditorPassword {
+  oldPassword: string; // 旧密码
+  NewPassword: string; // 新密码
+}
+
+export function queryEditorPassword(data: EditorPassword) {
+  return axios.post('/api/v1/user/editor/password', data);
+}

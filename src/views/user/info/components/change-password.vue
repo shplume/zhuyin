@@ -1,86 +1,105 @@
 <template>
   <a-form
     ref="formRef"
-    :model="formData"
-    class="form"
-    :label-col-props="{ span: 8 }"
-    :wrapper-col-props="{ span: 16 }"
+    :rules="rules"
+    :model="form"
+    :style="{ width: '600px' }"
+    @submit="handleSubmit"
   >
-    <a-form-item
-      field="orginal"
-      :label="'原密码'"
-      :rules="[
-        {
-          required: true,
-          message: '请输入原密码',
-        },
-      ]"
-    >
-      <a-input v-model="formData.name" />
+    <a-form-item field="oldPassword" label="旧密码" validate-trigger="blur">
+      <a-input v-model="form.oldPassword" placeholder="请输入旧密码..." />
+    </a-form-item>
+    <a-form-item field="NewPassword" label="新密码" validate-trigger="blur">
+      <a-input-password
+        v-model="form.NewPassword"
+        placeholder="请输入新密码..."
+      />
     </a-form-item>
     <a-form-item
-      field="current"
-      :label="'更改密码'"
-      :rules="[
-        {
-          required: true,
-          message: '请输入更改后密码',
-        },
-      ]"
+      field="NewPassword2"
+      label="确认新密码"
+      validate-trigger="blur"
     >
-      <a-input v-model="formData.number" />
-    </a-form-item>
-
-    <a-form-item
-      field="ensure"
-      :label="'确认密码'"
-      :rules="[
-        {
-          required: true,
-          message: '请确认密码',
-        },
-      ]"
-    >
-      <a-input v-model="formData.department" />
+      <a-input-password
+        v-model="form.NewPassword2"
+        placeholder="请再次输入新密码..."
+      />
     </a-form-item>
     <a-form-item>
       <a-space>
-        <a-button type="primary" @click="validate">
-          {{ $t('userSetting.save') }}
+        <a-button type="primary" html-type="submit" :loading="loading">
+          修改
         </a-button>
-        <a-button type="secondary" @click="reset">
-          {{ $t('userSetting.reset') }}
-        </a-button>
+        <a-button @click="$refs.formRef.resetFields()">重置</a-button>
       </a-space>
     </a-form-item>
   </a-form>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, reactive } from 'vue';
+  import { Message } from '@arco-design/web-vue';
   import { FormInstance } from '@arco-design/web-vue/es/form';
+  import { queryEditorPassword } from '@/api/user';
+  import useLoading from '@/hooks/loading';
 
   const formRef = ref<FormInstance>();
-  const formData = ref<any>({
-    orginal: '',
-    current: '',
-    ensure: '',
-  });
-  const validate = async () => {
-    const res = await formRef.value?.validate();
-    if (!res) {
-      // do some thing
-      // you also can use html-type to submit
+
+  const { loading, setLoading } = useLoading(false);
+  const handleSubmit = async ({ values, errors }) => {
+    if (!errors) {
+      try {
+        setLoading(true);
+        const res = await queryEditorPassword({
+          oldPassword: values.oldPassword, // 旧密码
+          NewPassword: values.NewPassword, // 新密码
+        });
+
+        if (res.status === 200) {
+          Message.success('修改成功');
+          await formRef.value?.resetFields();
+        }
+      } catch (error) {
+        // you can report use errorHandler or other
+      } finally {
+        setLoading(false);
+      }
     }
   };
-  const reset = async () => {
-    await formRef.value?.resetFields();
+
+  const form = reactive({
+    oldPassword: '',
+    NewPassword: '',
+    NewPassword2: '',
+  });
+
+  const rules = {
+    oldPassword: [
+      {
+        required: true,
+        message: '旧密码是必填的',
+      },
+    ],
+    NewPassword: [
+      {
+        required: true,
+        message: '新密码是必填的',
+      },
+    ],
+    NewPassword2: [
+      {
+        required: true,
+        message: '新密码是必填的',
+      },
+      {
+        validator: (value, cb) => {
+          if (value !== form.NewPassword) {
+            cb('两次密码不匹配');
+          } else {
+            cb();
+          }
+        },
+      },
+    ],
   };
 </script>
-
-<style scoped lang="less">
-  .form {
-    width: 540px;
-    margin: 0 auto;
-  }
-</style>

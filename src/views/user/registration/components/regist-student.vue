@@ -83,7 +83,7 @@
         message: '密码是必填的',
       },
       {
-        validator: (value, cb) => {
+        validator: (value: any, cb: any) => {
           if (value !== form.password) {
             cb('两个密码不匹配');
           } else {
